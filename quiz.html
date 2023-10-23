@@ -1,0 +1,476 @@
+<!-- simple html page containing your name and an image -->
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <title>Quiz</title>
+    <style>
+        /* DARK MODE MASTODON PATTERN from freefrontend */
+        html {
+            --s: 50px;
+            --c: #191b22;
+            --_s: calc(2*var(--s)) calc(2*var(--s));
+            --_g: 35.36% 35.36% at;
+            --_c: #0000 66%,#20222a 68% 70%,#0000 72%;
+            background: 
+                radial-gradient(var(--_g) 100% 25%,var(--_c)) var(--s) var(--s)/var(--_s), 
+                radial-gradient(var(--_g) 0 75%,var(--_c)) var(--s) var(--s)/var(--_s), 
+                radial-gradient(var(--_g) 100% 25%,var(--_c)) 0 0/var(--_s), 
+                radial-gradient(var(--_g) 0 75%,var(--_c)) 0 0/var(--_s), 
+                repeating-conic-gradient(var(--c) 0 25%,#0000 0 50%) 0 0/var(--_s), 
+                radial-gradient(var(--_c)) 0 calc(var(--s)/2)/var(--s) var(--s) var(--c);
+            background-attachment: fixed;
+        }
+
+        body {
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            overflow: hidden;
+        }
+
+        label, h1, h2, h3, h4, h5, h6, p {
+            color: #ffffff;
+        }
+
+        input[type=submit] {
+            background-color: #7dd56f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px;
+            margin-left: 10px;
+            padding: 5px 15px;
+        }
+
+        .header {
+            flex-direction: column;
+            padding: 20px;
+            justify-content: space-between;
+            background-color: #302e34;
+            border-radius: 5px;
+            margin: 20px;
+            margin-bottom: 30px;
+            box-shadow: 1px 1px 4px;
+        }
+
+        .title {
+            font-weight: bold;
+            display: inline;
+            max-width: max-content;
+            color: #ffffff;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #ffffff;
+            padding-left: 10px;
+        }
+
+        .root {
+            margin: 20px;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: row;
+        }
+        
+        .card {
+            display: flex;
+            flex-direction: column;
+            border-radius: 5px;
+            background-color: #302e34;
+            padding: 20px;
+            flex-grow: 1;
+            box-shadow: 1px 1px 4px;
+            margin-bottom: 10px;
+        }
+
+        .quiz-column {
+            flex: 1;
+            margin-right: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .form {
+            flex-direction: column;
+        }
+
+        .question {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        input, select {
+            border-radius: 5px;
+            border: 1px solid black;
+            padding: 5px;
+            margin-left: 10px;
+        }
+
+        .image {
+            height: 600px;
+            width: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            border-radius: 5px;
+            object-fit: fill;
+            overflow: hidden;
+        }
+
+        .welcome {
+            /* border: 1px solid #7dd56f; */
+            /* background-image: linear-gradient(to top left, #302e34 60%, #7dd56f 100%); */
+        }
+
+        .quiz-title {
+            display: inline;
+        }
+
+        .quiz-title-name {
+            color: #D4AF37;
+            text-shadow: 0 0 80px #D4AF37, 0 0 32px #D4AF37;
+        }
+
+        .hidden {
+            /* display: none; */
+        }
+
+        .submit-image {
+            position: absolute;
+            top: 100%;
+            left: 40%; 
+            height: 200px;
+            z-index: 100;
+            border-radius: 5px;
+        }
+
+        .submit-image-animate {
+            animation: submit-image-animation 3s;
+        }
+
+        .quiz-animate {
+            animation: quiz-animation 3s;
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        .correct {
+            transition: 2s;
+            background-color: #7dd56f;
+        }
+
+        .incorrect {
+            transition: 2s;
+            background-color: #d56f6f;
+        }
+
+        .radio-question {
+            border-radius: 5px;
+            padding: 5px;
+            margin-block-start: 0px;
+            margin-block-end: 0px;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+            margin-bottom: 2px;
+        }
+
+        @keyframes quiz-animation {
+            0% {
+                scale: 1;
+                translate: 0;
+            }
+            20% {
+                scale: 0.1;
+                translate: 100px;
+            }
+            80% {
+                scale: 0.1;
+                translate: 100px;
+            }
+            100% {
+                scale: 1;
+                translate: 0;
+            }
+        }
+
+        @keyframes submit-image-animation {
+            0% {
+                top: 100%;
+                left: 40%;
+            }
+            20% {
+                top: 40%;
+                left: 40%;
+            }
+            35% { transform: translate(1px, 1px) rotate(0deg); }
+            40% { transform: translate(-1px, -2px) rotate(-1deg); }
+            45% { transform: translate(-3px, 0px) rotate(1deg); }
+            50% { transform: translate(3px, 2px) rotate(0deg); }
+            55% { transform: translate(1px, -1px) rotate(1deg); }
+            75% { transform: translate(-3px, 1px) rotate(360deg); }
+            80% {
+                top: 40%;
+                left: 40%;
+            }
+            100% {
+                top: -40%;
+                left: 40%;
+                transform: translate(0px, 0px) rotate(360deg);
+            }
+        }
+
+        /* w3schools image shake animation */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="header">
+            <p class="title">Zhich</p>
+            <a class="nav-link" href="index.html">Page d'acceuil</a>
+            <a class="nav-link" href="horaire.html">Tableau</a>
+            <a class="nav-link" href="quiz-zhicheng.html">Quiz</a>
+        </div>
+        <div id="page-body" class="content root">
+            <form id="form-body" class="content" action="" name="zhich-form">
+                <div class="quiz-column">
+                    <div class="card welcome">
+                        <div class="quiz-title">
+                            <h2 class="quiz-title">Quiz sur </h2>
+                            <h1 class="quiz-title quiz-title-name">Zhich</h1>
+                        </div>
+                        <p>Bienvenue sur mon quiz! Celui-ci contient des questions sur moi et elle va tester si vous me connaissez. Si vous repondez correctement a toutes les questions, vous ne gagnerez rien du tout. Bonne chance!</p>
+                    </div>
+                    <div class="card">
+                        <p>Commençons par quelques questions très simples.</p>
+                        <div class="question">
+                            <label for="nom">Quel est mon nom?</label>
+                            <input type="text" id="nom" name="nom" value="" placeholder="Bill Bye">
+                        </div>
+                        <br>
+                        <div class="question">
+                            <label for="nomSondeur">Et quel est ton nom?</label>
+                            <input type="text" id="nomSondeur" name="nomSondeur" value="" placeholder="Dora l'exploratrice">
+                        </div>
+                    </div>
+                    <div class="card">
+                        <p>Savez-vous ceci?</p>
+                        <div class="question">
+                            <label for="naissance">Quel est ma date de naissance?</label>
+                            <input type="date" id="naissance" name="naissance" value="">
+                        </div>
+                    </div>
+                    <div class="card">
+                        <p>Futur?</p>
+                        <div class="question">
+                            <label for="metier">Quel métier désire-je dans le futur?</label>
+                            <input type="text" id="metier" name="metier" value="" placeholder="Joueur de la NBA">
+                        </div>
+                    </div>
+                </div>
+                <div class="quiz-column">
+                    <div class="card">
+                        <p>Continuons avec quelques questions sur ma culture.</p>
+                        <div class="question">
+                            <label for="origine">Quel est mon pays d'origine?</label>
+                            <select id="origine" name="origine" value="">
+                                <option value="canada">Canada</option>
+                                <option value="chine">Chine</option>
+                                <option value="france">France</option>
+                                <option value="japon">Japon</option>
+                                <option value="coree">Coree</option>
+                                <option value="autre">Autre</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div class="question">
+                            <label for="sport">Quel est mon sport favori?</label>
+                            <select id="sport" name="sport" value="">
+                                <option value="basketball">Basketball</option>
+                                <option value="aucun">Aucun</option>
+                                <option value="aucun">Aucun</option>
+                                <option value="football">Football</option>
+                                <option value="aucun">Aucun</option>
+                                <option value="aucun">Aucun</option>
+                                <option value="aucun">Aucun</option>
+                                <option value="aucun">Aucun</option>
+                                <option value="aucun">Aucun</option>
+                                <option value="aucun">Aucun</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div class="question">
+                            <label for="musique">Quel est mon groupe de musique favori?</label>
+                            <select id="musique" name="musique" value="">
+                                <option value="yoasobi">Yoasobi</option>
+                                <option value="bts">BTS</option>
+                                <option value="imase">Imase</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div class="question">
+                            <label for="food">Quel est mon plat favori?</label>
+                            <select id="food" name="food" value="">
+                                <option value="poutine">Poutine</option>
+                                <option value="sushi">Sushi</option>
+                                <option value="poulet">Poulet</option>
+                                <option value="autre">Autre</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <p>Et finalement, quelques questions sur mes passions.</p>
+                        <div>
+                            <p id="movie" class="radio-question" for="movie">Quel est mon film favori?</p>
+                            <input type="radio" name="movie" value="yourname">
+                            <label for="movie">Your Name.</label><br>
+                            <input type="radio" name="movie" value="weatheringwithyou">
+                            <label for="movie">Weathering With You</label><br>
+                            <input type="radio" name="movie" value="spiritedaway">
+                            <label for="movie">Spirited Away</label><br>
+                        </div>
+                        <br>
+                        <div>
+                            <p id="game" class="radio-question" for="game">Quel est mon jeu favori?</p>
+                            <input type="radio" name="game" value="minecraft">
+                            <label for="game">Minecraft</label><br>
+                            <input type="radio" name="game" value="valorant">
+                            <label for="game">Valorant</label><br>
+                            <input type="radio" name="game" value="leagueoflegends">
+                            <label for="game">League of Legends</label><br>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="question">
+                            <label>Soumettre</label>
+                            <input class="submit-button" type="submit" value="Soumettre">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="image">
+                <img src="https://wallpapersmug.com/download/840x1336/40fd04/macaron-brown-chocolate.jpg" alt="Desserts miam miam miam">
+            </div>
+        </div>
+        <img id="submit-image" class="hidden submit-image" src="./images/correcting.jpeg"/>
+    </div>
+    <script>
+        const form = document.forms['zhich-form'];
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const answers = {
+                nom: form.nom.value,
+                nomSondeur: form.nomSondeur.value,
+                naissance: form.naissance.value.toString(),
+                metier: form.metier.value,
+                origine: form.origine.value,
+                sport: form.sport.value,
+                musique: form.musique.value,
+                food: form.food.value,
+                movie: form.movie.value,
+                game: form.game.value,
+            };
+            console.log(answers);
+            const correctAnswers = {
+                nom: 'Zhich',
+                nomSondeur: 'Dora l\'exploratrice', // Aucune autre réponse permise.
+                naissance: '2000-01-20',
+                metier: 'Programmeur',
+                origine: 'chine',
+                sport: 'aucun',
+                musique: 'yoasobi',
+                food: 'autre',
+                movie: 'yourname',
+                game: 'minecraft',
+            };
+
+            if (!containsAnswers()) {
+                return;
+            }
+
+            let score = 0;
+            for (const key in answers) {
+                console.log(answers[key])
+                if (answers[key] == correctAnswers[key]) {
+                    document.getElementById(key).classList.add('correct');
+                    score++;
+                } else {
+                    document.getElementById(key).classList.add('incorrect');
+                }
+            }
+
+            // alert(`Vous avez obtenu ${score} points sur 10!`);
+            showSendAnimation();
+        });
+
+        function containsAnswers() {
+            const answers = {
+                nom: form.nom.value,
+                nomSondeur: form.nomSondeur.value,
+                naissance: form.naissance.value,
+                metier: form.metier.value,
+                origine: form.origine.value,
+                sport: form.sport.value,
+                musique: form.musique.value,
+                food: form.food.value,
+                movie: form.movie.value,
+                game: form.game.value,
+            };
+
+            let result = true
+
+            for (const key in answers) {
+                if (answers[key] == '') {
+                    document.getElementById(key).classList.add('shake');
+                    document.getElementById(key).addEventListener('animationend', () => {
+                        document.getElementById(key).classList.remove('shake');
+                    });
+
+                    result = false;
+                }
+            }
+
+            return result;
+        }
+
+        function showSendAnimation() {
+            const image = document.getElementById('submit-image');
+            const form = document.getElementById('form-body');
+
+            image.classList.remove('hidden');
+            image.classList.add('submit-image-animate');
+
+            form.classList.add('quiz-animate');
+
+            image.addEventListener('animationend', () => {
+                image.classList.add('hidden');
+                image.classList.remove('submit-image-animate');
+            });
+
+            form.addEventListener('animationend', () => {
+                form.classList.remove('quiz-animate');
+            });
+        }
+    </script>
+</body>
+</html>
