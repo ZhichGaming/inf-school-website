@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="./css/global.css">
+    <link rel="stylesheet" href="./css/memoire.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
+    <script src="./scripts/memoire.js"></script>
+    <title>Jeu de mémoire</title>
+</head>
+<body>
+    <div class="header">
+        <p class="title">Zhich</p>
+        <a class="nav-link" href="index.html">Page d'acceuil</a>
+        <a class="nav-link" href="horaire.html">Tableau</a>
+        <a class="nav-link" href="quiz.html">Quiz</a>
+        <a class="nav-link" href="memoire.html">Jeu de mémoire</a>
+    </div>
+    <div class="main">
+        <h1>Jeu de mémoire</h1>
+        <div class="col card">
+            <div class="row">
+                <img class="image clickable" src="./images/interrogation.png" id="1" onclick="clickImage(this.id)">
+                <img class="image clickable" src="./images/interrogation.png" id="2" onclick="clickImage(this.id)">
+                <img class="image clickable" src="./images/interrogation.png" id="3" onclick="clickImage(this.id)">
+                <img class="image clickable" src="./images/interrogation.png" id="4" onclick="clickImage(this.id)">
+                <img class="image clickable" src="./images/interrogation.png" id="5" onclick="clickImage(this.id)">
+            </div>
+            <div class="row">
+                <img class="image clickable" src="./images/interrogation.png" id="6" onclick="clickImage(this.id)">
+                <img class="image clickable" src="./images/interrogation.png" id="7" onclick="clickImage(this.id)">
+                <img class="image clickable" src="./images/interrogation.png" id="8" onclick="clickImage(this.id)">
+                <img class="image clickable" src="./images/interrogation.png" id="9" onclick="clickImage(this.id)">
+                <img class="image clickable" src="./images/interrogation.png" id="10" onclick="clickImage(this.id)">
+            </div>
+        </div>
+        <div class="card info-box">
+            <p class="info">Score: <span id="score">0</span></p>
+            <p class="info">Temps: <span id="timer">0</span></p>
+            <button id="start" class="info restart" onclick="restart()">Recommencer</button>
+        </div>
+    </div>
+</body>
+</html>
