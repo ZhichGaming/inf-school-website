@@ -34,10 +34,12 @@ function clickImage(id) {
         return
     }
     
-    document.getElementById(id).src = "./images/" + shuffled[parseInt(id) - 1]
+    setTimeout(() => {
+        document.getElementById(id).src = "./images/" + shuffled[parseInt(id) - 1]
+    }, 500)
 
     document.getElementById(id).classList.add("rotate")
-
+    
     document.getElementById(id).addEventListener("animationend", () => {
         document.getElementById(id).classList.remove("rotate")
     })

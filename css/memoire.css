@@ -46,8 +46,11 @@
     0% {
         transform: rotate3d(0, 1, 0, 0deg);
     }
+    50% {
+        transform: rotate3d(0, 1, 0, 90deg);
+    }
     100% {
-        transform: rotate3d(0, 1, 0, 360deg);
+        transform: rotate3d(0, 1, 0, 0deg);
     }
 }
 
