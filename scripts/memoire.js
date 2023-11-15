@@ -76,12 +76,24 @@ function validateAnswer(id1, id2) {
         }
     } else {
         setTimeout(() => {
-            q1.src = "./images/interrogation.png"
-            q2.src = "./images/interrogation.png"
+            setTimeout(() => {
+                q1.src = "./images/interrogation.png"
+                q2.src = "./images/interrogation.png"
+            }, 500)
+
+            document.getElementById(shuffled.indexOf(id1) + 1).classList.add("rotate")
+            document.getElementById(shuffled.indexOf(id2) + 1).classList.add("rotate")
+
+            document.getElementById(shuffled.indexOf(id1) + 1).addEventListener("animationend", () => {
+                document.getElementById(shuffled.indexOf(id1) + 1).classList.remove("rotate")
+            })
+            document.getElementById(shuffled.indexOf(id2) + 1).addEventListener("animationend", () => {
+                document.getElementById(shuffled.indexOf(id2) + 1).classList.remove("rotate")
+            })
 
             document.getElementById(shuffled.indexOf(id1) + 1).classList.add("clickable")
             document.getElementById(shuffled.indexOf(id2) + 1).classList.add("clickable")
-        }, 1000)
+        }, 1500)
     }
 }
 
