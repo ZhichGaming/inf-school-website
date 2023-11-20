@@ -34,6 +34,9 @@ function clickImage(id) {
         return
     }
     
+    score += 1
+    document.getElementById("score").innerHTML = score
+
     setTimeout(() => {
         document.getElementById(id).src = "./images/" + shuffled[parseInt(id) - 1]
     }, 500)
@@ -70,9 +73,6 @@ function validateAnswer(id1, id2) {
                 particleCount: 150,
                 spread: 60
             });
-
-            score += 1
-            document.getElementById("score").innerHTML = score
         }
     } else {
         setTimeout(() => {
@@ -119,7 +119,10 @@ function restart() {
     currentShown = -1
 
     document.getElementById("timer").innerHTML = "0"
+    document.getElementById("score").innerHTML = "0"
+    
     timer = 0
+    score = 0
 }
 
 function getShuffled() {
