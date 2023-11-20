@@ -1,19 +1,16 @@
 "use strict"
 
-const images = [
-    "chat-1.png",
-    "chat-2.png",
-    "cheval-1.png",
-    "cheval-2.png",
-    // "chien-1.png",
-    // "chien-2.png",
-    "lapin-1.png",
-    "lapin-2.png",
-    "poule-1.png",
-    "poule-2.png",
-    "cochon-1.png",
-    "cochon-2.png"
+const allImages = [
+    ["chat-1.png", "chat-2.png"],
+    ["cheval-1.png", "cheval-2.png"],
+    ["sine-1.png", "sine-2.png"],
+    ["log-1.png", "log-2.png"],
+    ["lapin-1.png", "lapin-2.png"],
+    ["poule-1.png", "poule-2.png"],
+    ["cochon-1.png", "cochon-2.png"]
 ]
+
+const images = allImages.map((a) => ({sort: Math.random(), value: a})).sort((a, b) => a.sort - b.sort).map((a) => a.value).slice(0, 7).flat()
 
 let shuffled = getShuffled()
 let correct = []
@@ -120,7 +117,7 @@ function restart() {
 
     document.getElementById("timer").innerHTML = "0"
     document.getElementById("score").innerHTML = "0"
-    
+
     timer = 0
     score = 0
 }
