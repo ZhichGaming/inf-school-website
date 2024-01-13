@@ -7,7 +7,7 @@ let paddlePosition = screen.width / 2;
 let leftPressed = false;
 let rightPressed = false;
 
-const GRAVITY = 9.8;
+const GRAVITY = 0.2;
 const paddleHeight = 20;
 const paddlePadding = 10;
 
@@ -112,6 +112,8 @@ function main() {
         checkPaddleCollision(balls[i]);
         checkBallDeletion(balls[i]);
 
+        // applyGravity(balls[i]);
+
         for (let j = 0; j < balls.length; j++) {
             if (i == j) {
                 continue
@@ -126,6 +128,13 @@ function main() {
     }
 
     requestAnimationFrame(main);
+}
+
+function applyGravity(ball) {
+    if (ball == null)
+        return;
+
+    ball.velocity[1] = ball?.velocity[1] + GRAVITY;
 }
 
 // Move the paddle.
