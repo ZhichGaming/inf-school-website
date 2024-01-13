@@ -1,21 +1,24 @@
 "use strict"
-let canvas = ""
-let context = ""
-let lastUpdate = Date.now();
+
+// Canvas and context.
+let canvas;
+let context;
+
+// General game variables.
+let balls = [];
 let paddlePosition = screen.width / 2;
+
+// Game state and loss animations.
 let lost = false;
 let lostAnimationInterval = null;
 
+// Key states.
 let leftPressed = false;
 let rightPressed = false;
 let shiftPressed = false;
-let restartDate = null;
 
-const GRAVITY = 0.2;
-const paddleHeight = 20;
-const paddlePadding = 10;
-const numberOfBalls = 3;
-const restartTimeRequired = 0.3;
+// Date of start of press of restart key.
+let restartDate = null;
 
 function dot(a, b) {
     return a.map((x, i) => a[i] * b[i]).reduce((m, n) => m + n);
@@ -27,7 +30,7 @@ function dot(a, b) {
  * @param {number} x - The x coordinate of the ball.
  * @param {number} y - The y coordinate of the ball.
  * @param {number} radius - The radius of the ball.
- * @param {string} color - The color of the ball.
+ * @param {string} color - The color of the ball in hex.
  * @param {number} velocity - The velocity of the ball. Vector (dx, dy).
  */
 class Ball {
@@ -39,6 +42,10 @@ class Ball {
         this.velocity = velocity;
     }
 
+    /**
+     * Draw the ball on the canvas.
+     * @returns void
+     */
     draw() {
         context.beginPath();
         context.fillStyle = this.color;
@@ -53,6 +60,15 @@ class Ball {
     }
 }
 
+/**
+ * Draw an arrow on the canvas. For debugging velocity purposes.
+ * @param {CanvasRenderingContext2D} context - The context of the canvas.
+ * @param {number} fromx - The x coordinate of the start of the arrow.
+ * @param {number} fromy - The y coordinate of the start of the arrow.
+ * @param {number} tox - The x coordinate of the end of the arrow.
+ * @param {number} toy - The y coordinate of the end of the arrow.
+ * @see https://stackoverflow.com/questions/808826/draw-arrow-on-canvas-tag
+ */
 function canvas_arrow(context, fromx, fromy, tox, toy) {
     var headlen = 10; // length of head in pixels
     var dx = tox - fromx;
@@ -63,10 +79,11 @@ function canvas_arrow(context, fromx, fromy, tox, toy) {
     context.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
     context.moveTo(tox, toy);
     context.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
-  }
+}
 
-let balls = [];
-
+/**
+ * Start the game.
+ */
 function start() {
     canvas = document.getElementById("canvas")
     context = canvas.getContext("2d");
@@ -74,15 +91,19 @@ function start() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     
-    for (let i = 0; i < numberOfBalls; i++) {
+    for (let i = 0; i < NUMBER_OF_BALLS; i++) {
         balls.push(generateBall());
     }
 
     main()
 }
 
+/**
+ * Generate a ball with random properties.
+ * @returns Ball object.
+ */
 function generateBall() {
-    const randomRadius = Math.floor(Math.random() * 50) + 10;
+    const randomRadius = Math.floor(Math.random() * 30) + 30;
     const randomColor = generateColor(); // Temporary color.
     const randomVelocity = generateVelocity();
     const [randomX, randomY] = generateCoords(randomRadius);
@@ -115,7 +136,7 @@ function generateCoords(radius) {
 }
 
 /**
- * Generate random velocity for the ball.
+ * Generate random velocity for the ball that have a magnitude of initialBallVelocity.
  * @returns Array of velocity [dx, dy].
  */
 function generateVelocity() {
@@ -125,7 +146,10 @@ function generateVelocity() {
         return generateVelocity();
     }
 
-    return randomVelocity;
+    const magnitude = Math.sqrt(randomVelocity[0]**2 + randomVelocity[1]**2);
+    const normalizedVelocity = [randomVelocity[0]/magnitude, randomVelocity[1]/magnitude];
+
+    return [normalizedVelocity[0] * INITIAL_BALL_VELOCITY, normalizedVelocity[1] * INITIAL_BALL_VELOCITY];
 }
 
 /**
@@ -136,6 +160,9 @@ function generateColor() {
     return "#" + Math.floor(Math.random()*16777215).toString(16);
 }
 
+/**
+ * The main game loop.
+ */
 function main() {
     const paddleMultiplier = shiftPressed ? 2 : 1;
     
@@ -151,7 +178,7 @@ function main() {
     // Draw the paddle.
     context.beginPath();
     context.fillStyle = "white";
-    context.roundedRectangle(paddlePosition-50, canvas.height - paddleHeight - paddlePadding, 100, paddleHeight, 10);
+    context.roundedRectangle(paddlePosition-50, canvas.height - PADDLE_HEIGHT - PADDLE_PADDING, 100, PADDLE_HEIGHT, 10);
     context.fill();
     context.closePath();
 
@@ -184,16 +211,20 @@ function main() {
         const now = Date.now();
         const diff = Math.abs(restartDate - now)/1000;
 
-        if (diff > restartTimeRequired) {
+        if (diff > RESTART_TIME_REQUIRED) {
             restartGame()
         } else {
-            document.getElementById("main").style.opacity = 0.5 - diff/restartTimeRequired;
+            document.getElementById("main").style.opacity = 0.5 - diff/RESTART_TIME_REQUIRED;
         }
     }
 
     requestAnimationFrame(main);
 }
 
+/**
+ * On click of the restart button.
+ * Adds a transition to the main element to make it fade out.
+ */
 function onclickRestartButton() {
     document.getElementById("main").style.transition = "opacity 0s";
     document.getElementById("main").style.opacity = 0;
@@ -204,6 +235,9 @@ function onclickRestartButton() {
     }, 100);
 }
 
+/**
+ * Restart the game and reset all variables.
+ */
 function restartGame() {
     lost = false;
     clearInterval(lostAnimationInterval);
@@ -213,7 +247,7 @@ function restartGame() {
     document.getElementById("loss-menu").classList.remove("show-loss-menu");
 
     balls = [];
-    for (let i = 0; i < numberOfBalls; i++) {
+    for (let i = 0; i < NUMBER_OF_BALLS; i++) {
         balls.push(generateBall());
     }
 
@@ -225,6 +259,10 @@ function restartGame() {
     document.getElementById("main").style.opacity = 1;
 }
 
+/**
+ * Apply gravity to the ball.
+ * @param {Ball} ball - The ball to apply gravity to.
+ */
 function applyGravity(ball) {
     if (ball == null)
         return;
@@ -265,7 +303,12 @@ function onKeyup(event) {
     }
 }
 
-// Check if two balls are colliding.
+/**
+ * Check if two balls are colliding.
+ * @param {Ball} ball1 - The first ball.
+ * @param {Ball} ball2 - The second ball.
+ * @returns True if the balls are colliding, false otherwise.
+ */
 function checkBallCollision(ball1, ball2) {
     if (ball1 == null || ball2 == null) {
         return false;
@@ -282,7 +325,11 @@ function checkBallCollision(ball1, ball2) {
     return false;
 }
 
-// Check if a ball is colliding with a wall.
+/**
+ * Check if the ball is colliding with the wall.
+ * @param {Ball} ball - The ball to check.
+ * @returns True if the ball is colliding with the wall, false otherwise.
+ */
 function checkWallCollision(ball) {
     if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
         ball.velocity[0] = -ball.velocity[0];
@@ -293,7 +340,11 @@ function checkWallCollision(ball) {
     }
 }
 
-// Set the new velocities of the balls that collide.
+/**
+ * Perform collision resolution between two balls.
+ * @param {Ball} obj1 - The first ball.
+ * @param {Ball} obj2 - The second ball.
+ */
 function collide(obj1, obj2) {
     let vCollision = {x: obj2.x - obj1.x, y: obj2.y - obj1.y};
     let distance = Math.sqrt((obj2.x-obj1.x)*(obj2.x-obj1.x) + (obj2.y-obj1.y)*(obj2.y-obj1.y));
@@ -314,8 +365,13 @@ function collide(obj1, obj2) {
     obj2.velocity[1] += (impulse * obj1.radius**2 * vCollisionNorm.y);
 }
 
+/**
+ * Check if the ball is colliding with the paddle.
+ * @param {Ball} ball - The ball to check.
+ * @returns True if the ball is colliding with the paddle, false otherwise.
+ */
 function checkPaddleCollision(ball) {
-    if (ball.y + ball.radius > canvas.height - paddleHeight - paddlePadding) {
+    if (ball.y + ball.radius > canvas.height - PADDLE_HEIGHT - PADDLE_PADDING) {
         if (ball.x > paddlePosition - 50 && ball.x < paddlePosition + 50) {
             // TODO: Fix bug of too much velocity.
             // if (ball.y + ball.radius + ball.velocity[1] > canvas.height - paddleHeight - paddlePadding) {
@@ -334,6 +390,10 @@ function checkPaddleCollision(ball) {
     }
 }
 
+/**
+ * Check if the ball is out of the canvas and delete it.
+ * @param {Ball} ball - The ball to check.
+ */
 function checkBallDeletion(ball) {
     if (ball.y - ball.radius > canvas.height) {
         balls.splice(balls.indexOf(ball), 1);
@@ -344,10 +404,20 @@ function checkBallDeletion(ball) {
     }
 }
 
+/**
+ * Check if the player lost. The player loses when there are no balls left.
+ * @returns True if the player lost, false otherwise.
+ */
 function checkLoss() {
     return balls.length == 0;
 }
 
+/**
+ * On loss of the game.
+ * Adds transitions to the canvas, the main element and the loss element to make them fade in/out.
+ * Adds the loss element to the DOM.
+ * Adds a setInterval to spawn random triangles in the loss element.
+ */
 function onLose() {
     lost = true;
 
@@ -377,6 +447,10 @@ function onLose() {
     } , 400);
 }
 
+/**
+ * Spawn a random triangle in the element.
+ * @param {HTMLElement} element - The element to spawn the triangle in.
+ */
 function spawnRandomTriangle(element) {
     const randomX = Math.floor(Math.random() * canvas.width);
     const newTriangle = document.createElement("div");
