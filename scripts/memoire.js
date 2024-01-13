@@ -35,7 +35,7 @@ function clickImage(id) {
     document.getElementById("score").innerHTML = score
 
     setTimeout(() => {
-        document.getElementById(id).src = "./images/" + shuffled[parseInt(id) - 1]
+        document.getElementById(id).src = "./assets/memoire/" + shuffled[parseInt(id) - 1]
     }, 500)
 
     document.getElementById(id).classList.add("rotate")
