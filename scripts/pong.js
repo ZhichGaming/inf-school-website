@@ -263,7 +263,7 @@ function onLose() {
         document.addEventListener("animationend", function() {
             document.getElementById("loss-menu").classList.remove("show-loss-menu");
         });
-    } , 1000);
+    } , 400);
 }
 
 function spawnRandomTriangle(element) {
