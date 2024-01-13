@@ -3,15 +3,19 @@ let canvas = ""
 let context = ""
 let lastUpdate = Date.now();
 let paddlePosition = screen.width / 2;
+let lost = false;
+let lostAnimationInterval = null;
 
 let leftPressed = false;
 let rightPressed = false;
 let shiftPressed = false;
+let restartDate = null;
 
 const GRAVITY = 0.2;
 const paddleHeight = 20;
 const paddlePadding = 10;
 const numberOfBalls = 3;
+const restartTimeRequired = 0.3;
 
 function dot(a, b) {
     return a.map((x, i) => a[i] * b[i]).reduce((m, n) => m + n);
@@ -147,14 +151,11 @@ function main() {
     // Draw the paddle.
     context.beginPath();
     context.fillStyle = "white";
-    // context.fillRect(paddlePosition-50, canvas.height - paddleHeight, 100, paddleHeight);
-    // rounded rectangle
     context.roundedRectangle(paddlePosition-50, canvas.height - paddleHeight - paddlePadding, 100, paddleHeight, 10);
-
     context.fill();
-    
     context.closePath();
 
+    // Draw the balls and check for collision.
     for (let i = 0; i < balls.length; i++) {
         balls[i].x += balls[i].velocity[0];
         balls[i].y += balls[i].velocity[1];
@@ -178,7 +179,50 @@ function main() {
         balls[i]?.draw();
     }
 
+    // Check for restart.
+    if (restartDate != null) {
+        const now = Date.now();
+        const diff = Math.abs(restartDate - now)/1000;
+
+        if (diff > restartTimeRequired) {
+            restartGame()
+        } else {
+            document.getElementById("main").style.opacity = 0.5 - diff/restartTimeRequired;
+        }
+    }
+
     requestAnimationFrame(main);
+}
+
+function onclickRestartButton() {
+    document.getElementById("main").style.transition = "opacity 0s";
+    document.getElementById("main").style.opacity = 0;
+    document.getElementById("main").style.transition = "opacity 0.25s ease-out";
+
+    setTimeout(function() {
+        restartGame();
+    }, 100);
+}
+
+function restartGame() {
+    lost = false;
+    clearInterval(lostAnimationInterval);
+    lostAnimationInterval = null;
+
+    document.getElementById("loss-menu").classList.add("hidden");
+    document.getElementById("loss-menu").classList.remove("show-loss-menu");
+
+    balls = [];
+    for (let i = 0; i < numberOfBalls; i++) {
+        balls.push(generateBall());
+    }
+
+    document.getElementById("canvas").classList.remove("lost");
+    document.getElementById("main").classList.remove("lost-body");
+
+    paddlePosition = screen.width / 2;
+    restartDate = null;
+    document.getElementById("main").style.opacity = 1;
 }
 
 function applyGravity(ball) {
@@ -197,22 +241,27 @@ document.addEventListener("keydown", onKeydown);
 document.addEventListener("keyup", onKeyup);
 
 function onKeydown(event) {
-    if (event.keyCode == 37) {
+    if (event.key == "ArrowLeft") {
         leftPressed = true;
-    } else if (event.keyCode == 39) {
+    } else if (event.key == "ArrowRight") {
         rightPressed = true;
-    } else if (event.keyCode == 16) {
+    } else if (event.key == "Shift") {
         shiftPressed = true;
+    } else if (event.key == "`" && !event.repeat) {
+        restartDate = Date.now();
     }
 }
 
 function onKeyup(event) {
-    if (event.keyCode == 37) {
+    if (event.key == "ArrowLeft") {
         leftPressed = false;
-    } else if (event.keyCode == 39) {
+    } else if (event.key == "ArrowRight") {
         rightPressed = false;
-    } else if (event.keyCode == 16) {
+    } else if (event.key == "Shift") {
         shiftPressed = false;
+    } else if (event.key == "`" && !event.repeat) {
+        restartDate = null;
+        document.getElementById("main").style.opacity = 1;
     }
 }
 
@@ -300,16 +349,23 @@ function checkLoss() {
 }
 
 function onLose() {
+    lost = true;
+
     document.getElementById("canvas").classList.add("lost");
     document.getElementById("main").classList.add("lost-body");
 
-    setInterval(function() {
+    // I can't clear the interval no matter what, triangles keep spawning.
+    lostAnimationInterval = setInterval(function() {
         if (!document.hasFocus())
+            return;
+
+        if (!lost)
             return;
 
         spawnRandomTriangle(document.getElementById("restart"));
         spawnRandomTriangle(document.getElementById("quit"));
     }, 500);
+    console.log(lostAnimationInterval + " " + lost)
 
     setTimeout(function() {
         document.getElementById("loss-menu").classList.remove("hidden");

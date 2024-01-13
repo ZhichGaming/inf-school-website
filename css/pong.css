@@ -12,6 +12,10 @@ body {
     background-color: #000000;
 }
 
+.main {
+    transition: opacity 0.25s ease-out;
+}
+
 .hidden {
     display: none;
 }

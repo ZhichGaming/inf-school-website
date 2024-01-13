@@ -12,14 +12,14 @@
                 <h1>Pong</h1>
             </div>
         </header> -->
-        <main id="main">
+        <main id="main" class="main">
             <canvas id="canvas"></canvas>
             <div id="loss-menu" class="loss-menu hidden">
                 <div class="loss-menu-content">
                     <span>failed</span>
                     <div class="loss-menu-buttons">
-                        <button id="restart" class="loss-menu-button"><span>Restart</span></button>
-                        <button id="quit" class="loss-menu-button"><span>Quit</span></button>
+                        <button id="restart" class="loss-menu-button" onclick="onclickRestartButton()" role="button"><span>Restart</span></button>
+                        <button id="quit" class="loss-menu-button" role="button"><span>Quit</span></button>
                     </div>
                 </div>
             </div>
