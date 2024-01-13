@@ -10,6 +10,7 @@ let rightPressed = false;
 const GRAVITY = 0.2;
 const paddleHeight = 20;
 const paddlePadding = 10;
+const numberOfBalls = 3;
 
 function dot(a, b) {
     return a.map((x, i) => a[i] * b[i]).reduce((m, n) => m + n);
@@ -68,15 +69,66 @@ function start() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     
-    balls.push(new Ball(100, 100, 50, "red", [2, 2]));
-    balls.push(new Ball(200, 200, 30, "blue", [5, 3]));
-    balls.push(new Ball(250, 300, 20, "green", [3, 5]));
-    balls.push(new Ball(500, 600, 50, "yellow", [-2, -2]));
-    balls.push(new Ball(400, 400, 30, "orange", [-5, -3]));
-    balls.push(new Ball(350, 300, 20, "purple", [-3, -5]));
-    balls.push(new Ball(750, 600, 20, "lime", [0, 20]));
+    for (let i = 0; i < numberOfBalls; i++) {
+        balls.push(generateBall());
+    }
 
     main()
+}
+
+function generateBall() {
+    const randomRadius = Math.floor(Math.random() * 50) + 10;
+    const randomColor = generateColor(); // Temporary color.
+    const randomVelocity = generateVelocity();
+    const [randomX, randomY] = generateCoords(randomRadius);
+
+    return new Ball(randomX, randomY, randomRadius, randomColor, randomVelocity);
+}
+
+/**
+ * Generate random coordinates for the ball.
+ * @param {*} radius The radius of the ball.
+ * @returns Array of coordinates [x, y].
+ */
+function generateCoords(radius) {
+    let randomX = Math.floor(Math.random() * canvas.width);
+    let randomY = Math.floor(Math.random() * canvas.height / 2);
+
+    if (randomX - radius < 0) {
+        randomX += radius;
+    } else if (randomX + radius > canvas.width) {
+        randomX -= radius;
+    }
+
+    if (randomY - radius < 0) {
+        randomY += radius;
+    } else if (randomY + radius > canvas.height) {
+        randomY -= radius;
+    }
+
+    return [randomX, randomY];
+}
+
+/**
+ * Generate random velocity for the ball.
+ * @returns Array of velocity [dx, dy].
+ */
+function generateVelocity() {
+    const randomVelocity = [Math.floor(Math.random() * 10) - 5, Math.floor(Math.random() * 10) - 5];
+
+    if (randomVelocity[0] == 0 || randomVelocity[1] == 0) {
+        return generateVelocity();
+    }
+
+    return randomVelocity;
+}
+
+/**
+ * Generate random color for the ball.
+ * @returns String of hexa color.
+ */
+function generateColor() {
+    return "#" + Math.floor(Math.random()*16777215).toString(16);
 }
 
 function main() {
