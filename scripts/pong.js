@@ -236,6 +236,25 @@ function checkLoss() {
 }
 
 function onLose() {
+    document.getElementById("canvas").classList.add("lost");
+    document.getElementById("main").classList.add("lost-body");
+
+    setInterval(function() {
+        if (!document.hasFocus())
+            return;
+
+        spawnRandomTriangle(document.getElementById("restart"));
+        spawnRandomTriangle(document.getElementById("quit"));
+    }, 500);
+
+    setTimeout(function() {
+        document.getElementById("loss-menu").classList.remove("hidden");
+        document.getElementById("loss-menu").classList.add("show-loss-menu");
+
+        document.addEventListener("animationend", function() {
+            document.getElementById("loss-menu").classList.remove("show-loss-menu");
+        });
+    } , 1000);
 }
 
 function spawnRandomTriangle(element) {

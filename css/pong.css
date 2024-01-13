@@ -11,3 +11,144 @@ body {
     overflow: hidden;
     background-color: #000000;
 }
+
+.hidden {
+    display: none;
+}
+
+.lost {
+    animation: lost 0.75s ease-out forwards;
+}
+
+.lost-body {
+    animation: lost-body 1s ease-out forwards;
+}
+
+.loss-menu {
+    z-index: 1;
+    background-color: #000000B3;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.loss-menu-content {
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    font-family: 'Comfortaa', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
+
+.loss-menu-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1em;
+}
+
+.loss-menu-button {
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    font-family: 'Comfortaa', sans-serif;
+    font-weight: 700;
+    border: 0;
+    outline: 0;
+    font-size: 1rem;
+    display: inline-block;
+    transform: skew(-21deg);
+    height: 60px;
+    width: 800px;
+    transition: 0.1s ease-in-out;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.loss-menu-button:hover {
+    width: 850px;
+    letter-spacing: 3px;
+    /* filter: blur(5px); */
+}
+
+#restart {
+    background-color: hsl(35, 100%, 55%);
+}
+
+#quit {
+    background-color: rgba(170, 27, 39, 255);
+}
+
+.loss-menu-button > * {
+    display: inline-block;
+    transform: skew(21deg);
+}
+
+.show-loss-menu {
+    animation: show-loss-menu 0.5s ease-out;
+}
+
+.triangle {
+    width: 0; 
+    height: 0; 
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    
+    border-bottom: 100px solid black;
+    opacity: 0.1;
+
+    position: absolute;
+    float: left;
+    
+    animation: move-up 20s ease-out forwards;
+}
+
+@keyframes move-up {
+    0% {
+        transform: translateY(50px);
+    }
+    100% {
+        transform: translateY(-200px);
+    }
+}
+
+@keyframes lost {
+    0% {
+        background-color: #00000000;
+        scale: 1;
+        rotate: 0deg;
+    }
+    100% {
+        background-color: #ff000040;
+        scale: 0.9;
+        rotate: 5deg;
+        /* drop shadow */
+        -webkit-box-shadow: 0px 0px 50px 10px #ff000040;
+    }
+}
+
+@keyframes lost-body {
+    0% {
+        background-color: #ff000040;
+    }
+    100% {
+        background-color: #00000000;
+    }
+}
+
+@keyframes show-loss-menu {
+    0% {
+        opacity: 0;
+        scale: 1.25;
+    }
+    100% {
+        opacity: 1;
+        scale: 1;
+    }
+}
