@@ -6,6 +6,7 @@ let paddlePosition = screen.width / 2;
 
 let leftPressed = false;
 let rightPressed = false;
+let shiftPressed = false;
 
 const GRAVITY = 0.2;
 const paddleHeight = 20;
@@ -132,17 +133,15 @@ function generateColor() {
 }
 
 function main() {
-    const now = Date.now();
-    const deltaTime = (now - lastUpdate) / 1000;
-    // lastUpdate = now;
+    const paddleMultiplier = shiftPressed ? 2 : 1;
     
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     // Move the paddle.
     if (leftPressed && paddlePosition > 50) {
-        paddlePosition -= 10;
+        paddlePosition -= 10 * paddleMultiplier;
     } else if (rightPressed && paddlePosition < canvas.width - 50) {
-        paddlePosition += 10;
+        paddlePosition += 10 * paddleMultiplier;
     }
 
     // Draw the paddle.
@@ -202,6 +201,8 @@ function onKeydown(event) {
         leftPressed = true;
     } else if (event.keyCode == 39) {
         rightPressed = true;
+    } else if (event.keyCode == 16) {
+        shiftPressed = true;
     }
 }
 
@@ -210,6 +211,8 @@ function onKeyup(event) {
         leftPressed = false;
     } else if (event.keyCode == 39) {
         rightPressed = false;
+    } else if (event.keyCode == 16) {
+        shiftPressed = false;
     }
 }
 
