@@ -37,3 +37,15 @@ const RESTART_TIME_REQUIRED = 0.3;
  * @type {number}
  */
 const INITIAL_BALL_VELOCITY = 5;
+
+const HEALTH_COLORS = {
+    1: "#BF2C34",
+    2: "#F07857",
+    3: "#F5C26B",
+    4: "#4FB06D",
+    5: "#53BDAS",
+    6: "#43A5BE",
+    7: "#F07857",
+    8: "#5C62D6",
+    9: "#253342"
+}

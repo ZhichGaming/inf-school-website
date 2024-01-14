@@ -30,16 +30,18 @@ function dot(a, b) {
  * @param {number} x - The x coordinate of the ball.
  * @param {number} y - The y coordinate of the ball.
  * @param {number} radius - The radius of the ball.
- * @param {string} color - The color of the ball in hex.
+ * @param {string} color - The color of the ball in hex. Deprecated.
  * @param {number} velocity - The velocity of the ball. Vector (dx, dy).
+ * @param {number} health - The initial health of the ball. Max: 9.
  */
 class Ball {
-    constructor(x, y, radius, color, velocity) {
+    constructor(x, y, radius, color, velocity, health) {
         this.x = x;
         this.y = y;
         this.radius = radius; 
-        this.color = color;
+        this.color = color; // Deprecated.
         this.velocity = velocity;
+        this.health = health;
     }
 
     /**
@@ -62,7 +64,7 @@ class Ball {
         let bx = buffer.getContext('2d');
 
         // fill offscreen buffer with the tint color
-        bx.fillStyle = this.color;
+        bx.fillStyle = HEALTH_COLORS[this.health];
         bx.fillRect(0,0,buffer.width,buffer.height);
 
         // destination atop makes a result with an alpha channel identical to fg, but with all pixels retaining their original color *as far as I can tell*
@@ -76,6 +78,11 @@ class Ball {
         context.globalAlpha = 0.5;
         context.drawImage(buffer, this.x - this.radius*1.505, this.y - this.radius*1.505, this.radius*3.01, this.radius*3.01);
         context.globalAlpha = 1;
+
+        // Draw health.
+        const healthLabel = new Image();
+        healthLabel.src = "assets/pong/default-" + this.health + ".png";
+        context.drawImage(healthLabel, this.x - this.radius, this.y - this.radius, this.radius*2, this.radius*2);
 
         // Draw outer circle image.
         const outerCircle = new Image();
@@ -137,13 +144,14 @@ function generateBall() {
     const randomColor = generateColor(); // Temporary color.
     const randomVelocity = generateVelocity();
     const [randomX, randomY] = generateCoords(randomRadius);
+    const randomHealth = generateHealth();
 
-    return new Ball(randomX, randomY, randomRadius, randomColor, randomVelocity);
+    return new Ball(randomX, randomY, randomRadius, randomColor, randomVelocity, randomHealth);
 }
 
 /**
  * Generate random coordinates for the ball.
- * @param {*} radius The radius of the ball.
+ * @param {number} radius The radius of the ball.
  * @returns Array of coordinates [x, y].
  */
 function generateCoords(radius) {
@@ -188,6 +196,14 @@ function generateVelocity() {
  */
 function generateColor() {
     return "#" + Math.floor(Math.random()*16777215).toString(16);
+}
+
+/**
+ * Generate random health for the ball.
+ * @returns Number between 1 and 9.
+ */
+function generateHealth() {
+    return Math.floor(Math.random() * 9) + 1;
 }
 
 /**
@@ -396,9 +412,8 @@ function collide(obj1, obj2) {
 }
 
 /**
- * Check if the ball is colliding with the paddle.
+ * Check if the ball is colliding with the paddle. If so, change the ball's velocity.
  * @param {Ball} ball - The ball to check.
- * @returns True if the ball is colliding with the paddle, false otherwise.
  */
 function checkPaddleCollision(ball) {
     if (ball.y + ball.radius > canvas.height - PADDLE_HEIGHT - PADDLE_PADDING) {
@@ -416,6 +431,12 @@ function checkPaddleCollision(ball) {
             //     ball.velocity[1] = -ball.velocity[1];
             // }
             ball.velocity[1] = -ball.velocity[1];
+
+            if (ball.health > 1) {
+                ball.health -= 1;
+            } else {
+                clearBall(ball);
+            }
         }
     }
 }
@@ -425,13 +446,31 @@ function checkPaddleCollision(ball) {
  * @param {Ball} ball - The ball to check.
  */
 function checkBallDeletion(ball) {
-    if (ball.y - ball.radius > canvas.height) {
-        balls.splice(balls.indexOf(ball), 1);
+    if (ball?.y - ball?.radius > canvas.height) {
+        deleteBall(ball);
     }
 
     if (checkLoss()) {
         onLose();
     }
+}
+
+/**
+ * Delete the ball from the balls array.
+ * @param {Ball} ball - The ball to delete.
+ */
+function deleteBall(ball) {
+    balls.splice(balls.indexOf(ball), 1);
+}
+
+/**
+ * Clear the ball from the canvas and animate its dissapearance.
+ * @param {Ball} ball - The ball to clear.
+ */
+function clearBall(ball) {
+    // TODO: animation
+
+    deleteBall(ball);
 }
 
 /**
