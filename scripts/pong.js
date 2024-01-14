@@ -47,10 +47,40 @@ class Ball {
      * @returns void
      */
     draw() {
-        context.beginPath();
-        context.fillStyle = this.color;
-        context.arc(this.x, this.y, this.radius, 0, (Math.PI) * 2);
-        context.fill();
+        // Draw inner circle image.
+        const innerCircle = new Image();
+
+        innerCircle.src = "assets/pong/hitcircle@2x.png";
+        innerCircle.width = this.radius*3.01;
+        innerCircle.height = this.radius*3.01;
+
+        // create offscreen buffer, 
+        let buffer = document.createElement('canvas');
+        buffer.width = innerCircle.width;
+        buffer.height = innerCircle.height;
+
+        let bx = buffer.getContext('2d');
+
+        // fill offscreen buffer with the tint color
+        bx.fillStyle = this.color;
+        bx.fillRect(0,0,buffer.width,buffer.height);
+
+        // destination atop makes a result with an alpha channel identical to fg, but with all pixels retaining their original color *as far as I can tell*
+        bx.globalCompositeOperation = "destination-atop";
+        bx.drawImage(innerCircle, 0,0, this.radius*3.01, this.radius*3.01);
+
+        // to tint the image, draw it first
+        context.drawImage(innerCircle, this.x - this.radius*1.505, this.y - this.radius*1.505, this.radius*3.01, this.radius*3.01);
+
+        //then set the global alpha to the amound that you want to tint it, and draw the buffer directly on top of it.
+        context.globalAlpha = 0.5;
+        context.drawImage(buffer, this.x - this.radius*1.505, this.y - this.radius*1.505, this.radius*3.01, this.radius*3.01);
+        context.globalAlpha = 1;
+
+        // Draw outer circle image.
+        const outerCircle = new Image();
+        outerCircle.src = "assets/pong/hitcircleoverlay@2x.png";
+        context.drawImage(outerCircle, this.x - this.radius, this.y - this.radius, this.radius*2, this.radius*2);
 
         // Draw the velocity vector of the ball for debugging purposes.
         // context.beginPath();
