@@ -174,6 +174,11 @@ function start() {
         balls.push(generateBall());
     }
 
+    // const bgm = new Audio("assets/pong/sfx/bgm-ohayou.mp3");
+    // bgm.loop = true;
+    // bgm.volume = 0.2;
+    // bgm.play();
+
     main()
 }
 
