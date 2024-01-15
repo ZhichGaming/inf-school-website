@@ -67,6 +67,7 @@ const HEALTH_COLORS = {
 const SFX = {
     "hit": new Audio("./assets/pong/sfx/normal-hitnormal.wav"),
     "hit-break": new Audio("./assets/pong/sfx/normal-hitfinish.wav"),
+    "hit-paddle": new Audio("./assets/pong/sfx/normal-hitclap.wav"),
     "naiwa": new Audio("./assets/pong/sfx/naiwa.wav"),
     "break-scifi": new Audio("./assets/pong/sfx/combobreak-scifi.wav"),
     "break-shatter": new Audio("./assets/pong/sfx/combobreak-shatter.wav"),

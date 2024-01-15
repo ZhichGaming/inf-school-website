@@ -434,10 +434,12 @@ function checkBallCollision(ball1, ball2) {
 function checkWallCollision(ball) {
     if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
         ball.velocity[0] = -ball.velocity[0];
+        SFX.hit.play();
     }
 
     if (ball.y - ball.radius < 0) {
         ball.velocity[1] = -ball.velocity[1];
+        SFX.hit.play();
     }
 }
 
@@ -464,6 +466,8 @@ function collide(obj1, obj2) {
     obj1.velocity[1] -= (impulse * obj2.radius**2 * vCollisionNorm.y);
     obj2.velocity[0] += (impulse * obj1.radius**2 * vCollisionNorm.x);
     obj2.velocity[1] += (impulse * obj1.radius**2 * vCollisionNorm.y);
+
+    SFX.hit.play();
 }
 
 /**
@@ -486,7 +490,7 @@ function checkPaddleCollision(ball) {
             //     ball.velocity[1] = -ball.velocity[1];
             // }
             ball.velocity[1] = -ball.velocity[1];
-            SFX.hit.play();
+            SFX["hit-paddle"].play();
 
             if (ball.health > 1) {
                 ball.health -= 1;
@@ -576,7 +580,7 @@ function onLose() {
         document.addEventListener("animationend", function() {
             document.getElementById("loss-menu").classList.remove("show-loss-menu");
         });
-    } , 400);
+    } , 1000);
 }
 
 /**
