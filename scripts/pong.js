@@ -481,6 +481,7 @@ function checkPaddleCollision(ball) {
             //     ball.velocity[1] = -ball.velocity[1];
             // }
             ball.velocity[1] = -ball.velocity[1];
+            SFX.hit.play();
 
             if (ball.health > 1) {
                 ball.health -= 1;
@@ -498,6 +499,10 @@ function checkPaddleCollision(ball) {
 function checkBallDeletion(ball) {
     if (ball?.y - ball?.radius > canvas.height) {
         deleteBall(ball);
+        
+        SFX["break-scifi"].play();
+        SFX["break-shatter"].play();
+        SFX["break-slide"].play();
     }
 
     if (checkLoss()) {
@@ -520,6 +525,9 @@ function deleteBall(ball) {
 function clearBall(ball) {
     // Animate the dissapearance of the ball.
     ball.dissapearanceAnimationProgress = 0;
+
+    // Play the sound effect.
+    SFX["hit-break"].play();
 }
 
 /**
@@ -538,6 +546,8 @@ function checkLoss() {
  */
 function onLose() {
     lost = true;
+
+    SFX.naiwa.play();
 
     document.getElementById("canvas").classList.add("lost");
     document.getElementById("main").classList.add("lost-body");

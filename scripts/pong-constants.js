@@ -38,6 +38,10 @@ const RESTART_TIME_REQUIRED = 0.3;
  */
 const INITIAL_BALL_VELOCITY = 5;
 
+/**
+ * Dictionary of colors for the ball depending on health.
+ * @type {Object}
+ */
 const HEALTH_COLORS = {
     1: "#BF2C34",
     2: "#F07857",
@@ -48,4 +52,23 @@ const HEALTH_COLORS = {
     7: "#F07857",
     8: "#5C62D6",
     9: "#253342"
+}
+
+/**
+ * Object containing the sound effects.
+ * @type {Object}
+ * @property {Audio} hit - The sound effect for a normal hit.
+ * @property {Audio} hit-break - The sound effect for a hit that breaks the circle.
+ * @property {Audio} naiwa - nai waaaaaa.
+ * @property {Audio} break-scifi - The sound effect for a scifi break.
+ * @property {Audio} break-shatter - The sound effect for a shatter break.
+ * @property {Audio} break-slide - The sound effect for a slide break.
+ */
+const SFX = {
+    "hit": new Audio("./assets/pong/sfx/normal-hitnormal.wav"),
+    "hit-break": new Audio("./assets/pong/sfx/normal-hitfinish.wav"),
+    "naiwa": new Audio("./assets/pong/sfx/naiwa.wav"),
+    "break-scifi": new Audio("./assets/pong/sfx/combobreak-scifi.wav"),
+    "break-shatter": new Audio("./assets/pong/sfx/combobreak-shatter.wav"),
+    "break-slide": new Audio("./assets/pong/sfx/combobreak-slide.wav")
 }
