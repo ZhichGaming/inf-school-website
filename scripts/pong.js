@@ -42,6 +42,10 @@ class Ball {
         this.color = color; // Deprecated.
         this.velocity = velocity;
         this.health = health;
+
+        this.isDissapearing = false;
+        this.canBeDeleted = false;
+        this.dissapearanceAnimationProgress = null;
     }
 
     /**
@@ -49,6 +53,9 @@ class Ball {
      * @returns void
      */
     draw() {
+        const globalAlpha = this.isDissapearing ? (1-this.dissapearanceAnimationProgress+0.01)/5 : 1;
+        context.globalAlpha = globalAlpha;
+
         // Draw inner circle image.
         const innerCircle = new Image();
 
@@ -77,7 +84,7 @@ class Ball {
         //then set the global alpha to the amound that you want to tint it, and draw the buffer directly on top of it.
         context.globalAlpha = 0.5;
         context.drawImage(buffer, this.x - this.radius*1.505, this.y - this.radius*1.505, this.radius*3.01, this.radius*3.01);
-        context.globalAlpha = 1;
+        context.globalAlpha = globalAlpha;
 
         // Draw health.
         const healthLabel = new Image();
@@ -89,11 +96,46 @@ class Ball {
         outerCircle.src = "assets/pong/hitcircleoverlay@2x.png";
         context.drawImage(outerCircle, this.x - this.radius, this.y - this.radius, this.radius*2, this.radius*2);
 
+        context.globalAlpha = 1;
+
+        // Draw the clear animation if it is in progress.
+        if (this.dissapearanceAnimationProgress != null) {
+            this.isDissapearing = true;
+            this.canBeDeleted = this.drawClearAnimation(this.x, this.y);
+            this.dissapearanceAnimationProgress += 0.02;
+        }
+
         // Draw the velocity vector of the ball for debugging purposes.
         // context.beginPath();
         // canvas_arrow(context, this.x, this.y, (this.x+this.velocity[0]*20), (this.y+this.velocity[1]*20));
         // context.stroke();
         // context.closePath();
+    }
+
+    /**
+     * Draw the clear animation of the ball.
+     * @param {number} x - The x coordinate of where the ball dissapeared.
+     * @param {number} y - The y coordinate of where the ball dissapeared.
+     * @returns True if the animation is done, false otherwise.
+     */
+    drawClearAnimation(x, y) {
+        if (this.dissapearanceAnimationProgress > 1) {
+            this.dissapearanceAnimationProgress = null;
+            return true;
+        }
+
+        const image = new Image();
+        image.src = "assets/pong/lighting-standard.png";
+
+        // Bell curve function. (I really bothered to go on desmos to find the perfect function for these...)
+        const opacity = Math.E**(-((this.dissapearanceAnimationProgress-0.5)**2)/(2*0.15**2))/Math.sqrt(2*Math.PI*0.4**2)
+        const length = -1/(20*this.dissapearanceAnimationProgress+1)+1;
+
+        context.globalAlpha = opacity;
+        context.drawImage(image, x-1.5*this.radius, y-1.5*this.radius, 3*this.radius*length, 3*this.radius*length);
+        context.globalAlpha = 1;
+
+        return false;
     }
 }
 
@@ -230,6 +272,14 @@ function main() {
 
     // Draw the balls and check for collision.
     for (let i = 0; i < balls.length; i++) {
+        if (balls[i]?.canBeDeleted) {
+            balls.splice(i, 1);
+            continue;
+        } else if (balls[i]?.isDissapearing) {
+            balls[i]?.draw();
+            continue;
+        }
+
         balls[i].x += balls[i].velocity[0];
         balls[i].y += balls[i].velocity[1];
 
@@ -464,13 +514,12 @@ function deleteBall(ball) {
 }
 
 /**
- * Clear the ball from the canvas and animate its dissapearance.
+ * Clear the ball from the canvas (happens after animation) and animate its dissapearance.
  * @param {Ball} ball - The ball to clear.
  */
 function clearBall(ball) {
-    // TODO: animation
-
-    deleteBall(ball);
+    // Animate the dissapearance of the ball.
+    ball.dissapearanceAnimationProgress = 0;
 }
 
 /**
@@ -504,7 +553,6 @@ function onLose() {
         spawnRandomTriangle(document.getElementById("restart"));
         spawnRandomTriangle(document.getElementById("quit"));
     }, 500);
-    console.log(lostAnimationInterval + " " + lost)
 
     setTimeout(function() {
         document.getElementById("loss-menu").classList.remove("hidden");
