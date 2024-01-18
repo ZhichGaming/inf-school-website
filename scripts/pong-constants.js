@@ -3,6 +3,12 @@
  */
 
 /**
+ * Ratio of the resolution of the canvas to its size.
+ * @type {number}
+ */
+const RESOLUTION_RATIO = 2;
+
+/**
  * The gravity constant.
  * @type {number}
  */
@@ -12,13 +18,19 @@ const GRAVITY = 0.2;
  * The height of the paddle in pixels.
  * @type {number}
  */
-const PADDLE_HEIGHT = 20;
+const PADDLE_HEIGHT = 20 * RESOLUTION_RATIO;
 
 /**
  * The distance of the paddle from the ground in pixels.
  * @type {number}
  */
-const PADDLE_PADDING = 10;
+const PADDLE_PADDING = 10 * RESOLUTION_RATIO;
+
+/**
+ * The width of the paddle in pixels.
+ * @type {number}
+ */
+const PADDLE_WIDTH = 100 * RESOLUTION_RATIO;
 
 /**
  * The number of balls in the game.

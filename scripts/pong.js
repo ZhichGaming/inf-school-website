@@ -6,7 +6,7 @@ let context;
 
 // General game variables.
 let balls = [];
-let paddlePosition = screen.width / 2;
+let paddlePosition = screen.width / 2 * RESOLUTION_RATIO;
 
 // Game state and loss animations.
 let lost = false;
@@ -36,11 +36,11 @@ function dot(a, b) {
  */
 class Ball {
     constructor(x, y, radius, color, velocity, health) {
-        this.x = x;
-        this.y = y;
-        this.radius = radius; 
-        this.color = color; // Deprecated.
-        this.velocity = velocity;
+        this.x = x * RESOLUTION_RATIO;
+        this.y = y * RESOLUTION_RATIO;
+        this.radius = radius * RESOLUTION_RATIO; 
+        this.color = color * RESOLUTION_RATIO; // Deprecated.
+        this.velocity = [velocity[0] * RESOLUTION_RATIO, velocity[1] * RESOLUTION_RATIO];
         this.health = health;
 
         this.isDissapearing = false;
@@ -55,6 +55,8 @@ class Ball {
     draw() {
         const globalAlpha = this.isDissapearing ? (1-this.dissapearanceAnimationProgress+0.01)/5 : 1;
         context.globalAlpha = globalAlpha;
+        // context.shadowBlur = 2;
+        // context.shadowColor = "white";
 
         // Draw inner circle image.
         const innerCircle = new Image();
@@ -167,8 +169,8 @@ function start() {
     canvas = document.getElementById("canvas")
     context = canvas.getContext("2d");
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth * RESOLUTION_RATIO;
+    canvas.height = window.innerHeight * RESOLUTION_RATIO;
     
     for (let i = 0; i < NUMBER_OF_BALLS; i++) {
         balls.push(generateBall());
@@ -202,8 +204,9 @@ function generateBall() {
  * @returns Array of coordinates [x, y].
  */
 function generateCoords(radius) {
-    let randomX = Math.floor(Math.random() * canvas.width);
-    let randomY = Math.floor(Math.random() * canvas.height / 2);
+    // We have to divide by resolution ratio because the canvas is scaled up and .
+    let randomX = Math.floor(Math.random() * canvas.width / RESOLUTION_RATIO);
+    let randomY = Math.floor(Math.random() * canvas.height / 2 / RESOLUTION_RATIO);
 
     if (randomX - radius < 0) {
         randomX += radius;
@@ -271,7 +274,7 @@ function main() {
     // Draw the paddle.
     context.beginPath();
     context.fillStyle = "white";
-    context.roundedRectangle(paddlePosition-50, canvas.height - PADDLE_HEIGHT - PADDLE_PADDING, 100, PADDLE_HEIGHT, 10);
+    context.roundedRectangle(paddlePosition-PADDLE_WIDTH/2, canvas.height - PADDLE_HEIGHT - PADDLE_PADDING, PADDLE_WIDTH, PADDLE_HEIGHT, 10);
     context.fill();
     context.closePath();
 
@@ -476,7 +479,7 @@ function collide(obj1, obj2) {
  */
 function checkPaddleCollision(ball) {
     if (ball.y + ball.radius > canvas.height - PADDLE_HEIGHT - PADDLE_PADDING) {
-        if (ball.x > paddlePosition - 50 && ball.x < paddlePosition + 50) {
+        if (ball.x > paddlePosition - PADDLE_WIDTH/2 && ball.x < paddlePosition + PADDLE_WIDTH/2) {
             // TODO: Fix bug of too much velocity.
             // if (ball.y + ball.radius + ball.velocity[1] > canvas.height - paddleHeight - paddlePadding) {
             //     const tmp = Math.abs(ball.y + ball.velocity[1] - (screen.height - paddleHeight - paddlePadding));
