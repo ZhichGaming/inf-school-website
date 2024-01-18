@@ -265,10 +265,10 @@ function main() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     // Move the paddle.
-    if (leftPressed && paddlePosition > 50) {
-        paddlePosition -= 10 * paddleMultiplier;
-    } else if (rightPressed && paddlePosition < canvas.width - 50) {
-        paddlePosition += 10 * paddleMultiplier;
+    if (leftPressed && paddlePosition > PADDLE_WIDTH/2) {
+        paddlePosition -= 10 * paddleMultiplier * RESOLUTION_RATIO;
+    } else if (rightPressed && paddlePosition < canvas.width - PADDLE_WIDTH/2) {
+        paddlePosition += 10 * paddleMultiplier * RESOLUTION_RATIO;
     }
 
     // Draw the paddle.
