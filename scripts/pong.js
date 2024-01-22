@@ -46,6 +46,8 @@ class Ball {
         this.isDissapearing = false;
         this.canBeDeleted = false;
         this.dissapearanceAnimationProgress = null;
+
+        this.lastBounce = Date.now();
     }
 
     /**
@@ -88,10 +90,19 @@ class Ball {
         context.drawImage(buffer, this.x - this.radius*1.505, this.y - this.radius*1.505, this.radius*3.01, this.radius*3.01);
         context.globalAlpha = globalAlpha;
 
-        // Draw health.
-        const healthLabel = new Image();
-        healthLabel.src = "assets/pong/default-" + this.health + ".png";
-        context.drawImage(healthLabel, this.x - this.radius, this.y - this.radius, this.radius*2, this.radius*2);
+        if (Date.now() - this.lastBounce > 7*1000) {
+            applyGravity(this);
+        } else if (Date.now() - this.lastBounce > 5*1000 && (Math.floor(new Date().getTime()/500) % 2 == 0)) {
+            // Draw warning.
+            const warning = new Image();
+            warning.src = "assets/pong/attention.png";
+            context.drawImage(warning, this.x - this.radius/2, this.y - this.radius/2, this.radius, this.radius);
+        } else {
+            // Draw health.
+            const healthLabel = new Image();
+            healthLabel.src = "assets/pong/default-" + this.health + ".png";
+            context.drawImage(healthLabel, this.x - this.radius, this.y - this.radius, this.radius*2, this.radius*2);
+        }
 
         // Draw outer circle image.
         const outerCircle = new Image();
@@ -291,7 +302,7 @@ function main() {
         balls[i].x += balls[i].velocity[0];
         balls[i].y += balls[i].velocity[1];
 
-        checkWallCollision(balls[i]);
+        checkWallCollision(balls[i]); // Does not set lastBounce.
         checkPaddleCollision(balls[i]);
         checkBallDeletion(balls[i]);
 
@@ -303,6 +314,9 @@ function main() {
             }
 
             if (checkBallCollision(balls[i], balls[j])) {
+                balls[i].lastBounce = Date.now();
+                balls[j].lastBounce = Date.now();
+
                 collide(balls[i], balls[j]);
             }
         }
@@ -376,7 +390,7 @@ function applyGravity(ball) {
 
 // Move the paddle.
 // document.addEventListener("mousemove", function(event) {
-//     paddlePosition = event.clientX;
+//     paddlePosition = event.clientX*2;
 // });
 
 document.addEventListener("keydown", onKeydown);
@@ -474,7 +488,7 @@ function collide(obj1, obj2) {
 }
 
 /**
- * Check if the ball is colliding with the paddle. If so, change the ball's velocity.
+ * Check if the ball is colliding with the paddle. If so, change the ball's velocity. Sets lastBounce to Date.now().
  * @param {Ball} ball - The ball to check.
  */
 function checkPaddleCollision(ball) {
@@ -492,6 +506,8 @@ function checkPaddleCollision(ball) {
             // } else {
             //     ball.velocity[1] = -ball.velocity[1];
             // }
+            ball.lastBounce = Date.now();
+
             ball.velocity[1] = -ball.velocity[1];
             SFX["hit-paddle"].play();
 
