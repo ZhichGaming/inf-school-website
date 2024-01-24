@@ -17,6 +17,11 @@ let leftPressed = false;
 let rightPressed = false;
 let shiftPressed = false;
 
+// Last time the shift key was pressed.
+let lastKeypressTime = Date.now();
+let isExpanding = false;
+let expansionState = 0;
+
 // Date of start of press of restart key.
 let restartDate = null;
 
@@ -267,6 +272,15 @@ function generateHealth() {
     return Math.floor(Math.random() * 9) + 1;
 }
 
+function getPaddleInformation() {
+    return {
+        x: paddlePosition-PADDLE_WIDTH/2-screen.width*expansionState,
+        y: canvas.height - PADDLE_HEIGHT - PADDLE_PADDING,
+        width: PADDLE_WIDTH + 2*screen.width*expansionState,
+        height: PADDLE_HEIGHT
+    }
+}
+
 /**
  * The main game loop.
  */
@@ -282,10 +296,22 @@ function main() {
         paddlePosition += 10 * paddleMultiplier * RESOLUTION_RATIO;
     }
 
+    if (isExpanding) {
+        expansionState += 0.1;
+
+        if (expansionState > 1) {
+            isExpanding = false;
+        }
+    } else if (expansionState > 0) {
+        expansionState -= 0.05;
+    }
+
+    const paddleInformation = getPaddleInformation();
+
     // Draw the paddle.
     context.beginPath();
     context.fillStyle = "white";
-    context.roundedRectangle(paddlePosition-PADDLE_WIDTH/2, canvas.height - PADDLE_HEIGHT - PADDLE_PADDING, PADDLE_WIDTH, PADDLE_HEIGHT, 10);
+    context.roundedRectangle(paddleInformation.x, paddleInformation.y, paddleInformation.width, paddleInformation.height, 10);
     context.fill();
     context.closePath();
 
@@ -403,6 +429,19 @@ function onKeydown(event) {
         rightPressed = true;
     } else if (event.key == "Shift") {
         shiftPressed = true;
+
+        var thisKeypressTime = new Date();
+
+        if ( thisKeypressTime - lastKeypressTime <= EXPANSION_DELTA )
+        {
+            // optional - if we'd rather not detect a triple-press
+            // as a second double-press, reset the timestamp
+            thisKeypressTime = 0;
+            isExpanding = true;
+            console.log("double");
+        }
+
+        lastKeypressTime = thisKeypressTime;
     } else if (event.key == "`" && !event.repeat) {
         restartDate = Date.now();
     }
@@ -492,8 +531,10 @@ function collide(obj1, obj2) {
  * @param {Ball} ball - The ball to check.
  */
 function checkPaddleCollision(ball) {
-    if (ball.y + ball.radius > canvas.height - PADDLE_HEIGHT - PADDLE_PADDING) {
-        if (ball.x > paddlePosition - PADDLE_WIDTH/2 && ball.x < paddlePosition + PADDLE_WIDTH/2) {
+    const paddleInformation = getPaddleInformation();
+
+    if (ball.y + ball.radius > paddleInformation.y) {
+        if (ball.x > paddleInformation.x && ball.x < paddleInformation.x+paddleInformation.width) {
             // TODO: Fix bug of too much velocity.
             // if (ball.y + ball.radius + ball.velocity[1] > canvas.height - paddleHeight - paddlePadding) {
             //     const tmp = Math.abs(ball.y + ball.velocity[1] - (screen.height - paddleHeight - paddlePadding));

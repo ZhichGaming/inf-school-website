@@ -85,3 +85,9 @@ const SFX = {
     "break-shatter": new Audio("./assets/pong/sfx/combobreak-shatter.wav"),
     "break-slide": new Audio("./assets/pong/sfx/combobreak-slide.wav")
 }
+
+/**
+ * Delay between keypresses to activate the expansion ability.
+ * @type {number}
+ */
+const EXPANSION_DELTA = 500;
