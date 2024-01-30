@@ -224,7 +224,7 @@ body {
 
 @keyframes show-win-menu {
     0% {
-        scale: 0.75;
+        scale: 0.90;
         opacity: 0;
     }
     100% {
