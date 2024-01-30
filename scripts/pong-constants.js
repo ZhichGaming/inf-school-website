@@ -91,3 +91,16 @@ const SFX = {
  * @type {number}
  */
 const EXPANSION_DELTA = 500;
+
+/**
+ * Required score to get each rank.
+ * @type {Object}
+ */
+const RANK_REQUIREMENTS = {
+    0: "ranking-D@2x.png",
+    0.6: "ranking-C@2x.png",
+    0.8: "ranking-B@2x.png",
+    0.9: "ranking-A@2x.png",
+    0.95: "ranking-S@2x.png",
+    1: "ranking-SH@2x.png"
+}

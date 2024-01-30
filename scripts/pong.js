@@ -7,6 +7,9 @@ let context;
 // General game variables.
 let balls = [];
 let paddlePosition = screen.width / 2 * RESOLUTION_RATIO;
+let startTime = Date.now();
+let score = 0;
+let maxScore = 0;
 
 // Game state and loss animations.
 let lost = false;
@@ -211,6 +214,8 @@ function generateBall() {
     const [randomX, randomY] = generateCoords(randomRadius);
     const randomHealth = generateHealth();
 
+    maxScore += randomHealth;
+
     return new Ball(randomX, randomY, randomRadius, randomColor, randomVelocity, randomHealth);
 }
 
@@ -391,9 +396,12 @@ function restartGame() {
     lost = false;
     clearInterval(lostAnimationInterval);
     lostAnimationInterval = null;
+    maxScore = 0
 
     document.getElementById("loss-menu").classList.add("hidden");
     document.getElementById("loss-menu").classList.remove("show-loss-menu");
+    document.getElementById("win-menu").classList.add("hidden");
+    document.getElementById("win-menu").classList.remove("show-win-menu");
 
     balls = [];
     for (let i = 0; i < NUMBER_OF_BALLS; i++) {
@@ -406,6 +414,9 @@ function restartGame() {
     paddlePosition = screen.width / 2;
     restartDate = null;
     document.getElementById("main").style.opacity = 1;
+
+    startTime = Date.now();
+    score = 0;
 }
 
 /**
@@ -545,6 +556,7 @@ function checkPaddleCollision(ball) {
 
             ball.velocity[1] = -ball.velocity[1];
             SFX["hit-paddle"].play();
+            score += 1;
 
             if (ball.health > 1) {
                 ball.health -= 1;
@@ -559,6 +571,14 @@ function checkPaddleCollision(ball) {
  * On win of the game.
  */
 function onWin() {
+    const min = Math.max(...Object.keys(RANK_REQUIREMENTS).filter( num => num <= score/maxScore ));
+    const rank = RANK_REQUIREMENTS[min];
+
+    document.getElementById("rank").src = `assets/pong/${rank}`;
+
+    document.getElementById("score").innerText = (score/maxScore*100).toFixed(1) + "%";
+    document.getElementById("time").innerText = `${Math.floor((Date.now() - startTime)/1000)}s`;
+
     document.getElementById("win-menu").classList.remove("hidden");
     document.getElementById("win-menu").classList.add("show-win-menu");
 
