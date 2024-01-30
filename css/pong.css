@@ -49,6 +49,10 @@ body {
 
 .rank {
     width: 500px;
+    height: 400px;
+    object-fit: cover;
+    overflow: hidden;
+    margin-top: 50px;
 }
 
 .win-menu-button {
