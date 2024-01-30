@@ -25,6 +25,62 @@ body {
     display: none;
 }
 
+.win-menu {
+    z-index: 1;
+    background-color: #000000B3;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(10px);
+}
+
+.win-menu-content {
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    font-family: 'Comfortaa', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
+
+.rank {
+    width: 500px;
+}
+
+.win-menu-button {
+    background-color: #88B300;
+    margin-top: 10px;
+    margin-bottom: 100px;
+    border-radius: 5px;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    font-family: 'Comfortaa', sans-serif;
+    font-weight: 700;
+    border: 0;
+    outline: 0;
+    font-size: 1rem;
+    display: inline-block;
+    height: 60px;
+    width: 300px;
+    transition: 0.1s ease-in-out;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.win-menu-button:hover {
+    width: 350px;
+    letter-spacing: 3px;
+}
+
+.show-win-menu {
+    animation: show-win-menu 0.5s ease-out;
+}
+
 .lost {
     animation: lost 0.75s ease-out forwards;
 }
@@ -159,5 +215,16 @@ body {
     100% {
         opacity: 1;
         scale: 1;
+    }
+}
+
+@keyframes show-win-menu {
+    0% {
+        scale: 0.75;
+        opacity: 0;
+    }
+    100% {
+        scale: 1;
+        opacity: 1;
     }
 }

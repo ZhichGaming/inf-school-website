@@ -319,6 +319,11 @@ function main() {
     for (let i = 0; i < balls.length; i++) {
         if (balls[i]?.canBeDeleted) {
             balls.splice(i, 1);
+
+            if (checkGameEnd()) {
+                onWin();
+            }
+
             continue;
         } else if (balls[i]?.isDissapearing) {
             balls[i]?.draw();
@@ -536,17 +541,6 @@ function checkPaddleCollision(ball) {
     if (ball.y + ball.radius > paddleInformation.y) {
         if (ball.x > paddleInformation.x && ball.x < paddleInformation.x+paddleInformation.width) {
             // TODO: Fix bug of too much velocity.
-            // if (ball.y + ball.radius + ball.velocity[1] > canvas.height - paddleHeight - paddlePadding) {
-            //     const tmp = Math.abs(ball.y + ball.velocity[1] - (screen.height - paddleHeight - paddlePadding));
-            //     console.log((screen.height - paddleHeight - paddlePadding))
-            //     console.log(ball.y +ball.velocity[1] + ball.radius)
-            //     console.log(tmp)
-
-            //     ball.y -= tmp;
-            //     ball.velocity[1] = -ball.velocity[1];
-            // } else {
-            //     ball.velocity[1] = -ball.velocity[1];
-            // }
             ball.lastBounce = Date.now();
 
             ball.velocity[1] = -ball.velocity[1];
@@ -562,6 +556,18 @@ function checkPaddleCollision(ball) {
 }
 
 /**
+ * On win of the game.
+ */
+function onWin() {
+    document.getElementById("win-menu").classList.remove("hidden");
+    document.getElementById("win-menu").classList.add("show-win-menu");
+
+    document.addEventListener("animationend", function() {
+        document.getElementById("win-menu").classList.remove("show-win-menu");
+    });
+}
+
+/**
  * Check if the ball is out of the canvas and delete it.
  * @param {Ball} ball - The ball to check.
  */
@@ -574,7 +580,7 @@ function checkBallDeletion(ball) {
         SFX["break-slide"].play();
     }
 
-    if (checkLoss()) {
+    if (checkGameEnd()) {
         onLose();
     }
 }
@@ -600,10 +606,10 @@ function clearBall(ball) {
 }
 
 /**
- * Check if the player lost. The player loses when there are no balls left.
- * @returns True if the player lost, false otherwise.
+ * Check if the game ended. The game ends when there are no balls left.
+ * @returns True if the game ended, false otherwise.
  */
-function checkLoss() {
+function checkGameEnd() {
     return balls.length == 0;
 }
 
