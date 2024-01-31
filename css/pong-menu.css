@@ -1,0 +1,202 @@
+.main {
+    display: flex;
+    margin: 20px;
+    padding-top: 20px;
+}
+
+.details {
+    width: 500px;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px 5px 0 0;
+    background-color: #302e34;
+}
+
+hr {
+    width: 100%;
+}
+
+.history-item-separator {
+    width: 100%;
+    height: 0px;
+    border: 0.5px solid #ffffff;
+    opacity: 0.2;
+}
+
+.thumbnail-section {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    padding: 20px;
+}
+
+.thumbnail-details > p, h1 {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    text-shadow: 1px 1px 0px #000000;
+}
+
+#description {
+    margin: 15px 10px;
+}
+
+#history {
+    flex: 1 ;/* make it simple */
+    margin: 15px 10px;
+    margin-bottom: 0;
+    overflow: scroll;
+}
+
+#history > h3 {
+    margin: 0px;
+}
+
+.history-item {
+    display: flex;
+    border-radius: 5px;
+    height: 70px;
+    flex-grow: 1;
+    padding: 10px;
+    align-items: center; /* Vertical */
+}
+
+.history-item-rank {
+    width: 100px;
+    height: 100%;
+    object-fit: cover;
+    /* bruh this is such nonsense */
+    object-position: 0 30%;
+    overflow: hidden;
+    display: flex;
+}
+
+.history-item-details {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+}
+
+.history-item-details-cards {
+    display: flex;
+    justify-content: center;
+    margin-top: auto;
+}
+
+.history-item-details-cards > p {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-right: 5px;
+    font-size: 1rem;
+    background-color: #00000022;
+    padding: 5px;
+    border-radius: 5px;
+    height: 20px;
+    font-weight: 300;
+    box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.history-item-difficulty {
+    font-weight: 400;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.history-item-score {
+    text-align: right;
+    font-size: 1.5rem;
+    font-weight: 500;
+    flex-grow: 1;
+}
+
+.select {
+    flex-grow: 1;
+    margin-left: 15px;
+}
+
+.header {
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+/* find a better way to center right */
+.header > input {
+    /* display: block;
+    margin-left: auto; 
+    margin-right: 0; */
+    float: right;
+    width: 300px;
+    background-color: black;
+}
+
+.select-items {
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+
+.select-item {
+    display: flex;
+    border-radius: 5px;
+    height: 70px;
+    flex-grow: 1;
+    padding: 10px;
+    align-items: center; /* Vertical */
+    margin-bottom: 10px;
+    background-color: #302e34;
+    margin-left: 50px;
+    transition: 0.1s;
+}
+
+.select-item:hover {
+    margin-left: 25px;
+}
+
+.select-item-selected {
+    margin-left: 5px;
+}
+
+.select-item-thumbnail {
+    object-fit: cover;
+    width: 500px;
+    height: 50px;
+}
+
+.select-item-details {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+}
+
+.select-item-details > p {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    text-shadow: 1px 1px 0px #000000;
+}
+
+.select-item-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.select-item-map-details {
+    background-color: #302e34;
+    border-radius: 5px;
+    margin: 0;
+    margin-bottom: 5px;
+    margin-left: 50px;
+    transition: 0.1s;
+}
+
+.select-item-map-details:hover {
+    margin-left: 25px;
+}
+
+.select-item-map-difficulty {
+    font-weight: 400;
+    margin: 0;
+    margin-bottom: 5px;
+    padding: 10px;
+}
