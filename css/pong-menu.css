@@ -139,6 +139,7 @@ hr {
 }
 
 .select-item {
+    position: relative;
     display: flex;
     border-radius: 5px;
     height: 70px;
@@ -149,6 +150,8 @@ hr {
     background-color: #302e34;
     margin-left: 50px;
     transition: 0.1s;
+    cursor: pointer;
+    z-index: 2;
 }
 
 .select-item:hover {
@@ -156,6 +159,11 @@ hr {
 }
 
 .select-item-selected {
+    margin-left: 5px;
+    cursor: auto;
+}
+
+.select-item-selected:hover {
     margin-left: 5px;
 }
 
@@ -183,6 +191,13 @@ hr {
     font-weight: 500;
 }
 
+.select-item-map {
+    position: relative;
+    transition: 0.1s;
+    animation: fade 0.5s ease-out;
+    z-index: 1;
+}
+
 .select-item-map-details {
     background-color: #302e34;
     border-radius: 5px;
@@ -190,6 +205,7 @@ hr {
     margin-bottom: 5px;
     margin-left: 50px;
     transition: 0.1s;
+    cursor: pointer;
 }
 
 .select-item-map-details:hover {
@@ -202,3 +218,14 @@ hr {
     margin-bottom: 5px;
     padding: 10px;
 }
+
+@keyframes fade {
+    0% { 
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    100% { 
+        opacity: 1;
+        transform: translateY(0px);
+    }
+  }
