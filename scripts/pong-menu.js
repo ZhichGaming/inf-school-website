@@ -63,7 +63,25 @@ function onLoad() {
 
             selectedMap = pongMap.id;
         }
-    }    
+    }
+
+    const inputHandler = (event) => {
+        const input = event.target.value.toLowerCase();
+        const items = document.getElementsByClassName('select-item');
+
+        for (let item of items) {
+            const title = item.getElementsByClassName('select-item-title')[0].innerText.toLowerCase();
+            const artist = item.getElementsByClassName('select-item-artist')[0].innerText.toLowerCase();
+
+            if (title.includes(input) || artist.includes(input)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        }
+    }
+
+    document.getElementById("search").addEventListener('input', inputHandler);
 }
 
 async function adjustVolume(
