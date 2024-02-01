@@ -28,6 +28,12 @@ let expansionState = 0;
 // Date of start of press of restart key.
 let restartDate = null;
 
+// Map information.
+let selectedMap = null;
+let difficulty = null;
+let numberOfBalls = NUMBER_OF_BALLS;
+let initialBallVelocity = INITIAL_BALL_VELOCITY;
+
 function dot(a, b) {
     return a.map((x, i) => a[i] * b[i]).reduce((m, n) => m + n);
 }
@@ -190,8 +196,20 @@ function start() {
 
     canvas.width = window.innerWidth * RESOLUTION_RATIO;
     canvas.height = window.innerHeight * RESOLUTION_RATIO;
+
+    selectedMap = getGetParam("map");
+    difficulty = getGetParam("difficulty");
+
+    if (selectedMap != null && difficulty != null) {
+        const map = pongMaps.find(map => map.id == selectedMap);
+        const diff = map.difficulties.find(diff => diff.name.toLowerCase() == difficulty.toLowerCase());
+
+        numberOfBalls = diff.number_of_balls;
+        initialBallVelocity = diff.initial_ball_velocity;
+    }
+
     
-    for (let i = 0; i < NUMBER_OF_BALLS; i++) {
+    for (let i = 0; i < numberOfBalls; i++) {
         balls.push(generateBall());
     }
 
@@ -202,6 +220,17 @@ function start() {
 
     main()
 }
+
+/**
+ * Get the value of a get parameter from the URL.
+ * @param {string} name - The name of the get parameter.
+ * @returns The value of the get parameter.
+ * @see https://stackoverflow.com/questions/831030/how-to-get-get-request-parameters-in-javascript
+ */
+function getGetParam(name){
+    if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+       return decodeURIComponent(name[1]);
+ }
 
 /**
  * Generate a ball with random properties.
@@ -258,7 +287,7 @@ function generateVelocity() {
     const magnitude = Math.sqrt(randomVelocity[0]**2 + randomVelocity[1]**2);
     const normalizedVelocity = [randomVelocity[0]/magnitude, randomVelocity[1]/magnitude];
 
-    return [normalizedVelocity[0] * INITIAL_BALL_VELOCITY, normalizedVelocity[1] * INITIAL_BALL_VELOCITY];
+    return [normalizedVelocity[0] * initialBallVelocity, normalizedVelocity[1] * initialBallVelocity];
 }
 
 /**
@@ -404,7 +433,7 @@ function restartGame() {
     document.getElementById("win-menu").classList.remove("show-win-menu");
 
     balls = [];
-    for (let i = 0; i < NUMBER_OF_BALLS; i++) {
+    for (let i = 0; i < numberOfBalls; i++) {
         balls.push(generateBall());
     }
 

@@ -34,12 +34,20 @@ function onLoad() {
             }
 
             const difficulties = '<div id="select-item-map" class="select-item-map">' + pongMap.difficulties.map (difficulty => {
-                return `<div class="select-item-map-details" id="${difficulty.name}" onclick="selectDifficulty('${difficulty.name}');">
+                return `<div class="select-item-map-details" id="${difficulty.name}">
                 <p class="select-item-map-difficulty">${difficulty.name}</p>
                 </div>`
             }).join('') + '</div>';
 
             document.getElementById(pongMap.id).insertAdjacentHTML('afterend', difficulties);
+
+            const children = document.getElementById('select-item-map').children;
+            
+            for (let tableChild of children) {                
+                tableChild.onclick = () => {
+                    window.location.href = `./pong.html?map=${pongMap.id}&difficulty=${tableChild.id}`;
+                }
+            }
 
             // Fade in/out music.
             if (currentBGM) {
