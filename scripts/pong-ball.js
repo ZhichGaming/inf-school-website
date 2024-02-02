@@ -64,9 +64,9 @@ class Ball {
         context.drawImage(buffer, this.x - this.radius*1.505, this.y - this.radius*1.505, this.radius*3.01, this.radius*3.01);
         context.globalAlpha = globalAlpha;
 
-        if (Date.now() - this.lastBounce > 7*1000) {
+        if (Date.now() - this.lastBounce > GRAVITY_TIME_CONDITION) {
             applyGravity(this);
-        } else if (Date.now() - this.lastBounce > 5*1000 && (Math.floor(new Date().getTime()/500) % 2 == 0)) {
+        } else if (Date.now() - this.lastBounce > GRAVITY_TIME_WARNING && (Math.floor(new Date().getTime()/500) % 2 == 0)) {
             // Draw warning.
             const warning = new Image();
             warning.src = "assets/pong/attention.png";

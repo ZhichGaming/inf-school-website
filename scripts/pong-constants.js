@@ -15,6 +15,18 @@ const RESOLUTION_RATIO = 2;
 const GRAVITY = 0.2;
 
 /**
+ * The time required for gravity to be applied to the ball.
+ * @type {number}
+ */
+const GRAVITY_TIME_CONDITION = 5000;
+
+/**
+ * The time required before the gravity warning is shown.
+ * @type {number}
+ */
+const GRAVITY_TIME_WARNING = 3000;
+
+/**
  * The height of the paddle in pixels.
  * @type {number}
  */
