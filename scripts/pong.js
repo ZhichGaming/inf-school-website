@@ -50,6 +50,10 @@ function start() {
  * The main game loop.
  */
 function main() {
+    requestAnimationFrame(main);
+
+    if (lost) return;
+    
     const paddleMultiplier = shiftPressed ? 2 : 1;
     
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -102,6 +106,16 @@ function main() {
         checkPaddleCollision(balls[i]);
         checkBallDeletion(balls[i]);
 
+        if (health + 0.01 > maxHealth) {
+            health = maxHealth;
+        } else if (health <= 0) {
+            health = 0;
+        } else {
+            health += 0.01;
+        }
+
+        document.getElementById("health").style.width = `${(health/maxHealth)*100}%`;
+
         // applyGravity(balls[i]);
 
         for (let j = 0; j < balls.length; j++) {
@@ -131,8 +145,6 @@ function main() {
             document.getElementById("main").style.opacity = 0.5 - diff/RESTART_TIME_REQUIRED;
         }
     }
-
-    requestAnimationFrame(main);
 }
 
 window.onload = start;

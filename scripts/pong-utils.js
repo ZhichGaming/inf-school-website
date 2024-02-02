@@ -162,11 +162,21 @@ function checkBallDeletion(ball) {
         SFX["break-scifi"].play();
         SFX["break-shatter"].play();
         SFX["break-slide"].play();
+
+        if (health - ball.health <= 0) {
+            health = 0;
+
+            onLose();
+        } else {
+            health -= ball.health;
+        }
+
+        document.getElementById("health").style.width = `${(health/maxHealth)*100}%`;
     }
 
-    if (checkGameEnd()) {
-        onLose();
-    }
+    // if (checkGameEnd()) {
+    //     onLose();
+    // }
 }
 
 /**
@@ -329,6 +339,7 @@ function restartGame() {
     clearInterval(lostAnimationInterval);
     lostAnimationInterval = null;
     maxScore = 0
+    health = maxHealth;
 
     audio.play();
     audio.currentTime = 0;

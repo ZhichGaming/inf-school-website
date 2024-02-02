@@ -8,6 +8,8 @@ let paddlePosition = screen.width / 2 * RESOLUTION_RATIO;
 let startTime = Date.now();
 let score = 0;
 let maxScore = 0;
+let maxHealth = MAX_HEALTH;
+let health = maxHealth;
 
 // Game state and loss animations.
 let lost = false;

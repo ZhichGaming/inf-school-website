@@ -45,6 +45,12 @@ const PADDLE_PADDING = 10 * RESOLUTION_RATIO;
 const PADDLE_WIDTH = 100 * RESOLUTION_RATIO;
 
 /**
+ * The maximum health of the player.
+ * @type {number}
+ */
+const MAX_HEALTH = 20;
+
+/**
  * The number of balls in the game.
  * @type {number}
  */
