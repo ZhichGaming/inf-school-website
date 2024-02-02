@@ -33,6 +33,7 @@ let selectedMap = null;
 let difficulty = null;
 let numberOfBalls = NUMBER_OF_BALLS;
 let initialBallVelocity = INITIAL_BALL_VELOCITY;
+let audio = null;
 
 function dot(a, b) {
     return a.map((x, i) => a[i] * b[i]).reduce((m, n) => m + n);
@@ -206,6 +207,18 @@ function start() {
 
         numberOfBalls = diff.number_of_balls;
         initialBallVelocity = diff.initial_ball_velocity;
+
+        audio = new Audio(`./assets/maps/${selectedMap}/music.mp3`);
+        audio.loop = true;
+        audio.volume = 0.2;
+
+        audio.addEventListener("canplaythrough", () => {
+            audio.play().catch(e => {
+                window.addEventListener('keydown', () => {
+                    audio.play()
+                }, { once: true })
+            })
+        });
     }
 
     
@@ -426,6 +439,9 @@ function restartGame() {
     clearInterval(lostAnimationInterval);
     lostAnimationInterval = null;
     maxScore = 0
+
+    audio.play();
+    audio.currentTime = 0;
 
     document.getElementById("loss-menu").classList.add("hidden");
     document.getElementById("loss-menu").classList.remove("show-loss-menu");
@@ -672,6 +688,7 @@ function onLose() {
     lost = true;
 
     SFX.naiwa.play();
+    audio.pause();
 
     document.getElementById("canvas").classList.add("lost");
     document.getElementById("main").classList.add("lost-body");
