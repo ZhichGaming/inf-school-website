@@ -53,6 +53,16 @@ hr {
     margin: 0px;
 }
 
+.history-empty {
+    color: white;
+    text-align: center;
+    opacity: 0.5;
+    height: 300px;
+    display: flex;
+  	justify-content: center;
+  	align-items: center;
+}
+
 .history-item {
     display: flex;
     border-radius: 5px;

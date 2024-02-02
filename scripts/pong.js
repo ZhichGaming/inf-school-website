@@ -630,6 +630,25 @@ function onWin() {
     document.addEventListener("animationend", function() {
         document.getElementById("win-menu").classList.remove("show-win-menu");
     });
+
+    if (selectedMap != null && difficulty != null) {
+        // save score to localStorage
+        const rawScores = JSON.parse(localStorage.getItem("scores"));
+        const scores = rawScores == null ? [] : rawScores[selectedMap] ?? [];
+
+        scores.push({ 
+            date: new Date().toISOString(), 
+            score: score/maxScore*100,
+            time: Math.floor((Date.now() - startTime)/1000),
+            difficulty: difficulty,
+            score: score,
+            maxScore: maxScore,
+            accuracy: score/maxScore*100,
+            rank: rank
+        });
+
+        localStorage.setItem("scores", JSON.stringify({ ...JSON.parse(localStorage.getItem("scores")), [selectedMap]: scores }));
+    }
 }
 
 /**

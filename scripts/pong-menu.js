@@ -49,6 +49,37 @@ function onLoad() {
                 }
             }
 
+            const history = document.getElementById('history');
+            const rawScores = JSON.parse(localStorage.getItem("scores"));
+            const scores = rawScores == null ? [] : rawScores[pongMap.id];
+            
+            for (let score of scores) {
+                const rank = score.rank.toLowerCase();
+                const rankImage = `assets/pong/${rank}`
+                const date = new Date(score.date).toDateString();
+                const historyItem = 
+                `<div class="history-item">
+                    <img class="history-item-rank" src="${rankImage}" alt="Ranking">
+                    <div class="history-item-details">
+                        <p class="history-item-difficulty">${score.difficulty}</p>
+                        <div class="history-item-details-cards">
+                            <p class="history-item-accuracy">${score.accuracy.toFixed(2)}%</p>
+                            <p class="history-item-time">${score.time}s</p>
+                            <p class="history-item-date">${date}</p>
+                        </div>
+                    </div>
+                    <p class="history-item-score">${score.score}</p>
+                </div>
+                <hr class="history-item-separator">`
+
+                history.insertAdjacentHTML('beforeend', historyItem);
+            }
+
+            if (scores === null || scores.length === 0) {
+                if (document.getElementsByClassName('history-empty').length === 0)
+                    history.insertAdjacentHTML('beforeend', '<p class="history-empty">No scores yet!</p>');
+            }
+
             // Fade in/out music.
             if (currentBGM) {
                 await adjustVolume(currentBGM, 0).then(() => {
