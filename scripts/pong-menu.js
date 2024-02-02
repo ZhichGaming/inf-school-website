@@ -53,10 +53,36 @@ function onLoad() {
             const rawScores = JSON.parse(localStorage.getItem("scores"));
             const scores = rawScores == null ? [] : rawScores[pongMap.id];
             
-            for (let score of scores) {
+            for (let score of scores.reverse()) {
                 const rank = score.rank.toLowerCase();
                 const rankImage = `assets/pong/${rank}`
-                const date = new Date(score.date).toDateString();
+                const date = new Date(score.date);
+
+                const delta = Math.round((+new Date - date) / 1000);
+
+                const minute = 60,
+                    hour = minute * 60,
+                    day = hour * 24,
+                    week = day * 7;
+
+                let fuzzy;
+
+                if (delta < 30) {
+                    fuzzy = 'now';
+                } else if (delta < minute) {
+                    fuzzy = delta + ' seconds ago';
+                } else if (delta < 2 * minute) {
+                    fuzzy = 'a minute ago'
+                } else if (delta < hour) {
+                    fuzzy = Math.floor(delta / minute) + ' minutes ago';
+                } else if (Math.floor(delta / hour) == 1) {
+                    fuzzy = '1 hour ago'
+                } else if (delta < day) {
+                    fuzzy = Math.floor(delta / hour) + ' hours ago';
+                } else if (delta < day * 2) {
+                    fuzzy = 'yesterday';
+                }
+
                 const historyItem = 
                 `<div class="history-item">
                     <img class="history-item-rank" src="${rankImage}" alt="Ranking">
@@ -65,7 +91,7 @@ function onLoad() {
                         <div class="history-item-details-cards">
                             <p class="history-item-accuracy">${score.accuracy.toFixed(2)}%</p>
                             <p class="history-item-time">${score.time}s</p>
-                            <p class="history-item-date">${date}</p>
+                            <p class="history-item-date">${fuzzy}</p>
                         </div>
                     </div>
                     <p class="history-item-score">${score.score}</p>
