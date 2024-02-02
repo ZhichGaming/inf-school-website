@@ -22,6 +22,7 @@ let shiftPressed = false;
 let lastKeypressTime = Date.now();
 let isExpanding = false;
 let expansionState = 0;
+let lastExpansionDate = Date.now();
 
 // Date of start of press of restart key.
 let restartDate = null;

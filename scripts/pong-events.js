@@ -13,11 +13,14 @@ function onKeydown(event) {
 
         if ( thisKeypressTime - lastKeypressTime <= EXPANSION_DELTA )
         {
+            if ( Date.now() - lastExpansionDate < 1000 ) 
+                return;
+
             // optional - if we'd rather not detect a triple-press
             // as a second double-press, reset the timestamp
             thisKeypressTime = 0;
             isExpanding = true;
-            console.log("double");
+            lastExpansionDate = Date.now();
         }
 
         lastKeypressTime = thisKeypressTime;

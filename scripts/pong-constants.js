@@ -93,6 +93,12 @@ const SFX = {
 const EXPANSION_DELTA = 500;
 
 /**
+ * Cooldown of the expansion ability in ms.
+ * @type {number}
+ */
+const EXPANSION_COOLDOWN = 1000;
+
+/**
  * Required score to get each rank.
  * @type {Object}
  */
