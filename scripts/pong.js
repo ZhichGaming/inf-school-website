@@ -53,7 +53,7 @@ function main() {
     requestAnimationFrame(main);
 
     if (lost) return;
-    
+
     const paddleMultiplier = shiftPressed ? 2 : 1;
     
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -111,7 +111,7 @@ function main() {
         } else if (health <= 0) {
             health = 0;
         } else {
-            health += 0.01;
+            health += 0.01/2;
         }
 
         document.getElementById("health").style.width = `${(health/maxHealth)*100}%`;

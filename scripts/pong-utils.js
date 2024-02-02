@@ -174,9 +174,9 @@ function checkBallDeletion(ball) {
         document.getElementById("health").style.width = `${(health/maxHealth)*100}%`;
     }
 
-    // if (checkGameEnd()) {
-    //     onLose();
-    // }
+    if (checkGameEnd()) {
+        onWin();
+    }
 }
 
 /**
