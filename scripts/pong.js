@@ -47,19 +47,6 @@ function start() {
 }
 
 /**
- * Get the information of the paddle.
- * @returns Object with x, y, width and height.
- */
-function getPaddleInformation() {
-    return {
-        x: paddlePosition-PADDLE_WIDTH/2-screen.width*expansionState,
-        y: canvas.height - PADDLE_HEIGHT - PADDLE_PADDING,
-        width: PADDLE_WIDTH + 2*screen.width*expansionState,
-        height: PADDLE_HEIGHT
-    }
-}
-
-/**
  * The main game loop.
  */
 function main() {
@@ -146,53 +133,6 @@ function main() {
     }
 
     requestAnimationFrame(main);
-}
-
-/**
- * On click of the restart button.
- * Adds a transition to the main element to make it fade out.
- */
-function onclickRestartButton() {
-    document.getElementById("main").style.transition = "opacity 0s";
-    document.getElementById("main").style.opacity = 0;
-    document.getElementById("main").style.transition = "opacity 0.25s ease-out";
-
-    setTimeout(function() {
-        restartGame();
-    }, 100);
-}
-
-/**
- * Restart the game and reset all variables.
- */
-function restartGame() {
-    lost = false;
-    clearInterval(lostAnimationInterval);
-    lostAnimationInterval = null;
-    maxScore = 0
-
-    audio.play();
-    audio.currentTime = 0;
-
-    document.getElementById("loss-menu").classList.add("hidden");
-    document.getElementById("loss-menu").classList.remove("show-loss-menu");
-    document.getElementById("win-menu").classList.add("hidden");
-    document.getElementById("win-menu").classList.remove("show-win-menu");
-
-    balls = [];
-    for (let i = 0; i < numberOfBalls; i++) {
-        balls.push(generateBall());
-    }
-
-    document.getElementById("canvas").classList.remove("lost");
-    document.getElementById("main").classList.remove("lost-body");
-
-    paddlePosition = screen.width / 2;
-    restartDate = null;
-    document.getElementById("main").style.opacity = 1;
-
-    startTime = Date.now();
-    score = 0;
 }
 
 window.onload = start;
