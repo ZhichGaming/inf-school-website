@@ -15,6 +15,8 @@ function onLoad() {
         const appendedChild = document.getElementById('select-items').lastElementChild;
     
         appendedChild.onclick = async () => {
+            document.getElementById("history").classList.remove('hidden');
+
             selectedMap = pongMap;
     
             if (document.getElementsByClassName('select-item-selected').length > 0)
