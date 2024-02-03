@@ -16,6 +16,7 @@ function onLoad() {
     
         appendedChild.onclick = async () => {
             document.getElementById("history").classList.remove('hidden');
+            document.getElementById("history").innerHTML = '<h3>Play History</h3>';
 
             selectedMap = pongMap;
     
