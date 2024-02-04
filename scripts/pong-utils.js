@@ -39,13 +39,13 @@ function generateCoords(radius) {
 
     if (randomX - radius < 0) {
         randomX += radius;
-    } else if (randomX + radius > canvas.width) {
+    } else if (randomX + radius > canvas.width/RESOLUTION_RATIO) {
         randomX -= radius;
     }
 
     if (randomY - radius < 0) {
         randomY += radius;
-    } else if (randomY + radius > canvas.height) {
+    } else if (randomY + radius > canvas.height/RESOLUTION_RATIO) {
         randomY -= radius;
     }
 
