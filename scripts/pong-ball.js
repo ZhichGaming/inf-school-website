@@ -92,11 +92,19 @@ class Ball {
             this.dissapearanceAnimationProgress += 0.02;
         }
 
-        // Draw the velocity vector of the ball for debugging purposes.
-        // context.beginPath();
-        // canvas_arrow(context, this.x, this.y, (this.x+this.velocity[0]*20), (this.y+this.velocity[1]*20));
-        // context.stroke();
-        // context.closePath();
+        // Draw the velocity vector of the ball.
+        if (paused) {
+            context.strokeStyle = "white";
+            context.lineWidth = 5;
+
+            context.beginPath();
+            canvas_arrow(context, this.x, this.y, (this.x+this.velocity[0]*20), (this.y+this.velocity[1]*20));
+            context.stroke();
+            context.closePath();
+
+            context.strokeStyle = "black";
+            context.lineWidth = 1;
+        }
     }
 
     /**

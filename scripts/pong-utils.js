@@ -276,6 +276,7 @@ function onWin() {
  */
 function onLose() {
     lost = true;
+    paused = true;
 
     SFX.naiwa.play();
     audio.pause();
@@ -336,6 +337,7 @@ function onclickRestartButton() {
  */
 function restartGame() {
     lost = false;
+    paused = false;
     clearInterval(lostAnimationInterval);
     lostAnimationInterval = null;
     maxScore = 0

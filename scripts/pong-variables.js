@@ -14,6 +14,7 @@ let health = maxHealth;
 // Game state and loss animations.
 let lost = false;
 let lostAnimationInterval = null;
+let paused = true;
 
 // Key states.
 let leftPressed = false;
