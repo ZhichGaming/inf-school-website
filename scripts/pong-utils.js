@@ -238,7 +238,8 @@ function onWin() {
 
     document.getElementById("rank").src = `assets/pong/${rank}`;
 
-    document.getElementById("score").innerText = (score/maxScore*100).toFixed(1) + "%";
+    document.getElementById("score").innerText = String(score).padStart(6, "0").replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    document.getElementById("accuracy").innerText = (score/maxScore*100).toFixed(1) + "%";
     document.getElementById("time").innerText = `${Math.floor((Date.now() - startTime)/1000)}s`;
 
     document.getElementById("win-menu").classList.remove("hidden");
