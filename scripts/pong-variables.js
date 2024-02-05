@@ -1,6 +1,7 @@
 // Canvas and context.
 let canvas;
 let context;
+let animationFrameID
 
 // General game variables.
 let balls = [];

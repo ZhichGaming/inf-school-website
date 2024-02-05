@@ -341,8 +341,8 @@ function onclickRestartButton() {
  * Restart the game and reset all variables.
  */
 function restartGame() {
+    cancelAnimationFrame(animationFrameID);
     lost = false;
-    paused = false;
     clearInterval(lostAnimationInterval);
     lostAnimationInterval = null;
     maxScore = 0
@@ -370,6 +370,9 @@ function restartGame() {
 
     startTime = Date.now();
     score = 0;
+    paused = false;
+
+    main()
 }
 
 /**

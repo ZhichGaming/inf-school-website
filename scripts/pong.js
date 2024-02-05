@@ -71,6 +71,20 @@ function start() {
         });
     }
 
+    setInterval(() => {
+        // Check for restart.
+        if (restartDate != null) {
+            const now = Date.now();
+            const diff = Math.abs(restartDate - now)/1000;
+
+            if (diff > RESTART_TIME_REQUIRED) {
+                restartGame()
+            } else {
+                document.getElementById("main").style.opacity = 0.5 - diff/RESTART_TIME_REQUIRED;
+            }
+        }
+    }, 10)
+
     // const bgm = new Audio("assets/pong/sfx/bgm-ohayou.mp3");
     // bgm.loop = true;
     // bgm.volume = 0.2;
@@ -83,7 +97,7 @@ function start() {
  * The main game loop.
  */
 function main() {
-    if (!paused) requestAnimationFrame(main);;
+    if (!paused) animationFrameID = requestAnimationFrame(main);
 
     const paddleMultiplier = shiftPressed ? 2 : 1;
     
@@ -163,18 +177,6 @@ function main() {
         }
         
         balls[i]?.draw();
-    }
-
-    // Check for restart.
-    if (restartDate != null) {
-        const now = Date.now();
-        const diff = Math.abs(restartDate - now)/1000;
-
-        if (diff > RESTART_TIME_REQUIRED) {
-            restartGame()
-        } else {
-            document.getElementById("main").style.opacity = 0.5 - diff/RESTART_TIME_REQUIRED;
-        }
     }
 }
 
