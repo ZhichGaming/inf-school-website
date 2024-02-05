@@ -14,7 +14,13 @@ function onLoad() {
         document.getElementById('select-items').insertAdjacentHTML('beforeend', mapElement);
         const appendedChild = document.getElementById('select-items').lastElementChild;
     
+        appendedChild.onmouseover = () => {
+            SFX.hover.cloneNode().play();
+        }
+
         appendedChild.onclick = async () => {
+            SFX["select-expand"].cloneNode().play();
+
             document.getElementById("history").classList.remove('hidden');
             document.getElementById("history").innerHTML = '<h3>Play History</h3>';
 
@@ -46,9 +52,17 @@ function onLoad() {
 
             const children = document.getElementById('select-item-map').children;
             
-            for (let tableChild of children) {                
+            for (let tableChild of children) {           
+                tableChild.onmouseover = () => {
+                    SFX.hover.cloneNode().play()
+                }
+
                 tableChild.onclick = () => {
-                    window.location.href = `./pong.html?map=${pongMap.id}&difficulty=${tableChild.id}`;
+                    SFX["select-difficulty"].cloneNode().play();
+
+                    setTimeout(() => {
+                        window.location.href = `./pong.html?map=${pongMap.id}&difficulty=${tableChild.id}`;
+                    }, 1000);
                 }
             }
 

@@ -85,10 +85,23 @@ function start() {
         }
     }, 10)
 
-    // const bgm = new Audio("assets/pong/sfx/bgm-ohayou.mp3");
-    // bgm.loop = true;
-    // bgm.volume = 0.2;
-    // bgm.play();
+    document.getElementById("win-menu-retry").addEventListener("mouseover", () => {
+        SFX.hover.cloneNode().play();
+    });
+    document.getElementById("win-menu-menu").addEventListener("mouseover", () => {
+        SFX.hover.cloneNode().play();
+    });
+
+    document.getElementById("win-menu-retry").onclick = () => {
+        onclickRestartButton();
+    }
+    document.getElementById("win-menu-menu").onclick = () => {
+        SFX["select-expand"].cloneNode().play();
+
+        setTimeout(() => {
+            window.location.href = "./pong-menu.html";
+        }, 1000);
+    }
 
     main()
 }

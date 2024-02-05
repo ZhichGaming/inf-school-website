@@ -117,12 +117,12 @@ function checkBallCollision(ball1, ball2) {
 function checkWallCollision(ball) {
     if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
         ball.velocity[0] = -ball.velocity[0];
-        SFX.hit.play();
+        // SFX.hit.cloneNode().play();
     }
 
     if (ball.y - ball.radius < 0) {
         ball.velocity[1] = -ball.velocity[1];
-        SFX.hit.play();
+        // SFX.hit.cloneNode().play();
     }
 }
 
@@ -139,7 +139,7 @@ function checkPaddleCollision(ball) {
             ball.lastBounce = Date.now();
 
             ball.velocity[1] = -ball.velocity[1];
-            SFX["hit-paddle"].play();
+            SFX["hit"].cloneNode().play();
             score += 1;
 
             if (ball.health > 1) {
@@ -159,6 +159,7 @@ function checkBallDeletion(ball) {
     if (ball?.y - ball?.radius > canvas.height) {
         deleteBall(ball);
         
+        // Won't clone these because they shouldn't be spammed too much. 
         SFX["break-scifi"].play();
         SFX["break-shatter"].play();
         SFX["break-slide"].play();
@@ -213,7 +214,7 @@ function collide(obj1, obj2) {
     obj2.velocity[0] += (impulse * obj1.radius**2 * vCollisionNorm.x);
     obj2.velocity[1] += (impulse * obj1.radius**2 * vCollisionNorm.y);
 
-    SFX.hit.play();
+    // SFX.hit.cloneNode().play();
 }
 
 /**
@@ -253,6 +254,12 @@ function onWin() {
         document.getElementById("win-menu").classList.remove("show-win-menu");
     });
 
+    if (score/maxScore*100 > 60) {
+        SFX["gameover-pass"].play();
+    } else {
+        SFX["gameover-fail"].play();
+    }
+
     if (selectedMap != null && difficulty != null) {
         // save score to localStorage
         const rawScores = JSON.parse(localStorage.getItem("scores"));
@@ -283,7 +290,7 @@ function onLose() {
     lost = true;
     paused = true;
 
-    SFX.naiwa.play();
+    SFX.fail.play();
     audio.pause();
 
     document.getElementById("canvas").classList.add("lost");
@@ -357,6 +364,8 @@ function restartGame() {
     maxScore = 0
     health = maxHealth;
 
+    SFX.restart.play();
+
     audio.play();
     audio.currentTime = 0;
 
@@ -401,7 +410,7 @@ function clearBall(ball) {
     ball.dissapearanceAnimationProgress = 0;
 
     // Play the sound effect.
-    SFX["hit-break"].play();
+    SFX["hit-break"].cloneNode().play();
 }
 
 /**

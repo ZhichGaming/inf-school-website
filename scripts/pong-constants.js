@@ -93,6 +93,14 @@ const HEALTH_COLORS = {
  * @property {Audio} break-scifi - The sound effect for a scifi break.
  * @property {Audio} break-shatter - The sound effect for a shatter break.
  * @property {Audio} break-slide - The sound effect for a slide break.
+ * @property {Audio} restart - The sound effect for a restart.
+ * @property {Audio} lose - The sound effect played when losing.
+ * @property {Audio} overfail - The sound effect for a fail.
+ * @property {Audio} overpass - The sound effect for a pass.
+ * @property {Audio} score-tick - The sound effect for a score tick. Pitch should be adjusted.
+ * @property {Audio} select-difficulty - The sound effect for selecting a difficulty.
+ * @property {Audio} select-expand - The sound effect for expanding a map.
+ * @property {Audio} hover - The sound effect for hovering.
  */
 const SFX = {
     "hit": new Audio("./assets/pong/sfx/normal-hitnormal.wav"),
@@ -101,7 +109,15 @@ const SFX = {
     "naiwa": new Audio("./assets/pong/sfx/naiwa.wav"),
     "break-scifi": new Audio("./assets/pong/sfx/combobreak-scifi.wav"),
     "break-shatter": new Audio("./assets/pong/sfx/combobreak-shatter.wav"),
-    "break-slide": new Audio("./assets/pong/sfx/combobreak-slide.wav")
+    "break-slide": new Audio("./assets/pong/sfx/combobreak-slide.wav"),
+    "restart": new Audio("./assets/pong/sfx/restart.wav"),
+    "fail": new Audio("./assets/pong/sfx/failsound.wav"),
+    "gameover-fail": new Audio("./assets/pong/sfx/rank-impact-fail.wav"),
+    "gameover-pass": new Audio("./assets/pong/sfx/rank-impact-pass.wav"),
+    "score-tick": new Audio("./assets/pong/sfx/score-tick.wav"),
+    "select-difficulty": new Audio("./assets/pong/sfx/select-difficulty.mp3"),
+    "select-expand": new Audio("./assets/pong/sfx/select-expand.mp3"),
+    "hover": new Audio("./assets/pong/sfx/hover.mp3")
 }
 
 /**
