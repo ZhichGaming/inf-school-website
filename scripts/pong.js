@@ -85,6 +85,13 @@ function start() {
         }
     }, 10)
 
+    document.getElementById("restart").addEventListener("mouseover", () => {
+        SFX.hover.cloneNode().play();
+    });
+    document.getElementById("quit").addEventListener("mouseover", () => {
+        SFX.hover.cloneNode().play();
+    });
+
     document.getElementById("win-menu-retry").addEventListener("mouseover", () => {
         SFX.hover.cloneNode().play();
     });
