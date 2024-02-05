@@ -323,6 +323,15 @@ function getPaddleInformation() {
         height: PADDLE_HEIGHT
     }
 }
+
+/**
+ * On click of the cursor control checkbox.
+ * @param {HTMLInputElement} checkbox - The checkbox.
+ */
+function onCheckCursorControl(checkbox) {
+    controlWithMouse = checkbox.checked;
+}
+
 /**
  * On click of the restart button.
  * Adds a transition to the main element to make it fade out.

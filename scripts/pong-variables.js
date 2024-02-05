@@ -11,6 +11,7 @@ let score = 0;
 let maxScore = 0;
 let maxHealth = MAX_HEALTH;
 let health = maxHealth;
+let controlWithMouse = false;
 
 // Game state and loss animations.
 let lost = false;

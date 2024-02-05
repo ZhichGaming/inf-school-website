@@ -42,7 +42,8 @@ function onKeyup(event) {
     }
 }
 
-// Move the paddle.
-// document.addEventListener("mousemove", function(event) {
-//     paddlePosition = event.clientX*2;
-// });
+// Move the paddle using cursor.
+document.addEventListener("mousemove", function(event) {
+    if (controlWithMouse)
+        paddlePosition = event.clientX*2;
+});
