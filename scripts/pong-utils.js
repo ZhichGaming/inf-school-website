@@ -235,10 +235,14 @@ function applyGravity(ball) {
 function onWin() {
     const min = Math.max(...Object.keys(RANK_REQUIREMENTS).filter( num => num <= score/maxScore ));
     const rank = RANK_REQUIREMENTS[min];
+    const map = pongMaps.find( map => map.id == selectedMap);
 
     document.getElementById("rank").src = `assets/pong/${rank}`;
 
-    document.getElementById("score").innerText = String(score).padStart(6, "0").replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    document.getElementById("win-menu-title").innerText = map.name ?? "Unknown";
+    document.getElementById("win-menu-artist").innerText = map.artist ?? "Unknown";
+    document.getElementById("win-menu-difficulty").innerText = difficulty ?? "Unknown";
+    document.getElementById("score").innerText = String(score).padStart(6, "0").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     document.getElementById("accuracy").innerText = (score/maxScore*100).toFixed(1) + "%";
     document.getElementById("time").innerText = `${Math.floor((Date.now() - startTime)/1000)}s`;
 

@@ -27,17 +27,29 @@
             
             <div id="win-menu" class="win-menu hidden">
                 <div class="win-menu-content">
+                    <p id="win-menu-title">Default</p>
+                    <p id="win-menu-artist">Zhich</p>
                     <img id="rank" class="rank" src="./assets/pong/ranking-A@2x.png" alt="Ranking">
                     <h2 id="score">0</h2>
-                    <div>
-                        <div class="accuracy">
-                            <span>Accuracy</span>
+                    <div class="play-info">
+                        <div class="play-info-elem">
+                            <span class="play-info-label">Accuracy</span>
                             <span id="accuracy">0</span>
+                        </div>
 
-                            <span>Time</span>
+                        <div class="play-info-elem">
+                            <span class="play-info-label">Time</span>
                             <span id="time">0</span>
                         </div>
-                        <button class="win-menu-button" role="button" onclick="window.location.href='./pong-menu.html'">Menu</button>
+
+                        <div class="play-info-elem">
+                            <span class="play-info-label">Difficulty</span>
+                            <span id="win-menu-difficulty">Normal</span>
+                        </div>
+                    </div>
+                    <div class="win-menu-buttons">
+                        <button class="win-menu-button win-menu-retry" role="button" onclick="onclickRestartButton()">Retry</button>
+                        <button class="win-menu-button win-menu-menu" role="button" onclick="window.location.href='./pong-menu.html'">Menu</button>
                     </div>
                 </div>
             </div>

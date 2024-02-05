@@ -1,6 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@100;200;300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+/* This isn't legal but please don't sue me. */
+@font-face {
+    font-family: "San Francisco";
+    font-weight: 400;
+    src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -120,13 +127,24 @@ body {
 .win-menu-content {
     transform: translate(-50%, -50%);
     color: #ffffff;
-    font-family: 'Comfortaa', sans-serif;
+    font-family: "San Francisco", sans-serif;
+    font-weight: 300;
     font-size: 1.5rem;
-    letter-spacing: 3px;
     text-align: center;
     position: fixed;
     top: 50%;
     left: 50%;
+}
+
+#win-menu-title {
+    font-size: 36px;
+    padding-bottom: 10px;
+}
+
+#win-menu-artist {
+    font-size: 24px;
+    /* padding-bottom: 50px; */
+    opacity: 0.5;
 }
 
 .rank {
@@ -134,14 +152,48 @@ body {
     height: 400px;
     object-fit: cover;
     overflow: hidden;
+    /* margin-top: 50px; */
+    margin-bottom: -150px;
+}
+
+#score {
+    /* padding-bottom: 100px; */
+    font-family: 'Exo 2', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+}
+
+.play-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-top: 50px;
-    margin-bottom: -100px;
+    margin-bottom: 20px;
+}
+
+.play-info-elem {
+    display: flex;
+    flex-direction: column;
+    margin: 0px 20px;
+}
+
+.play-info-label {
+    color: #fff;
+    opacity: 0.5;
+    font-family: 'Comfortaa', sans-serif;
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.win-menu-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .win-menu-button {
-    background-color: #88B300;
     margin-top: 10px;
-    margin-bottom: 100px;
     border-radius: 5px;
     color: #fff;
     text-align: center;
@@ -152,7 +204,7 @@ body {
     outline: 0;
     font-size: 1rem;
     display: inline-block;
-    height: 60px;
+    height: 40px;
     width: 300px;
     transition: 0.1s ease-in-out;
     cursor: pointer;
@@ -162,6 +214,14 @@ body {
 .win-menu-button:hover {
     width: 350px;
     letter-spacing: 3px;
+}
+
+.win-menu-retry {
+    background-color: hsl(35, 100%, 55%);
+}
+
+.win-menu-menu {
+    background-color: #88B300;
 }
 
 .show-win-menu {
@@ -195,13 +255,6 @@ body {
     position: fixed;
     top: 50%;
     left: 50%;
-}
-
-#score {
-    padding-bottom: 100px;
-    font-family: 'Exo 2', sans-serif;
-    font-size: 2rem;
-    font-weight: 400;
 }
 
 .loss-menu-buttons {
