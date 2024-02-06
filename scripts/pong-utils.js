@@ -466,8 +466,11 @@ function restartGame() {
     startTime = Date.now();
     score = 0;
     hits = 0;
+    missed = 0;
     paused = false;
 
+    document.getElementById("score-display-combo").innerText = "x0";
+    document.getElementById("score-display-accuracy").innerText = "100.0%";
     document.getElementById("score-display-text").innerText = "000,000";
 
     main()
