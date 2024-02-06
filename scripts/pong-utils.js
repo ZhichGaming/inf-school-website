@@ -22,7 +22,7 @@ function generateBall() {
     const [randomX, randomY] = generateCoords(randomRadius);
     const randomHealth = generateHealth();
 
-    maxScore += randomHealth;
+    maxHits += randomHealth;
 
     return new Ball(randomX, randomY, randomRadius, randomColor, randomVelocity, randomHealth);
 }
@@ -141,7 +141,12 @@ function checkPaddleCollision(ball) {
             ball.velocity[1] = -ball.velocity[1];
             SFX["hit"].cloneNode().play();
             hits++;
-            score += ball.health * Math.sqrt(ball.velocity[0]**2 + ball.velocity[1]**2);
+            combo++;
+
+            document.getElementById("score-display-combo").innerText = `x${combo}`;
+            document.getElementById("score-display-accuracy").innerText = `${(hits/(hits+missed)*100).toFixed(1)}%`;
+
+            updateScore((ball.health * Math.sqrt(ball.velocity[0]**2 + ball.velocity[1]**2)) * (1+combo/10));
 
             if (ball.health > 1) {
                 ball.health -= 1;
@@ -164,6 +169,11 @@ function checkBallDeletion(ball) {
         SFX["break-scifi"].play();
         SFX["break-shatter"].play();
         SFX["break-slide"].play();
+
+        missed += ball.health;
+        combo = 0;
+
+        document.getElementById("score-display-combo").innerText = `x${combo}`;
 
         if (health - ball.health <= 0) {
             health = 0;
@@ -235,7 +245,7 @@ function applyGravity(ball) {
  * On win of the game.
  */
 function onWin() {
-    const min = Math.max(...Object.keys(RANK_REQUIREMENTS).filter( num => num <= hits/maxScore ));
+    const min = Math.max(...Object.keys(RANK_REQUIREMENTS).filter( num => num <= hits/maxHits ));
     const rank = RANK_REQUIREMENTS[min];
     const map = pongMaps.find( map => map.id == selectedMap);
 
@@ -245,7 +255,7 @@ function onWin() {
     document.getElementById("win-menu-artist").innerText = map.artist ?? "Unknown";
     document.getElementById("win-menu-difficulty").innerText = difficulty ?? "Unknown";
     document.getElementById("score").innerText = String(score.toFixed(0)).padStart(6, "0").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    document.getElementById("accuracy").innerText = (hits/maxScore*100).toFixed(1) + "%";
+    document.getElementById("accuracy").innerText = (hits/maxHits*100).toFixed(1) + "%";
     document.getElementById("time").innerText = `${Math.floor((Date.now() - startTime)/1000)}s`;
 
     document.getElementById("win-menu").classList.remove("hidden");
@@ -255,7 +265,7 @@ function onWin() {
         document.getElementById("win-menu").classList.remove("show-win-menu");
     });
 
-    if (hits/maxScore*100 > 60) {
+    if (hits/maxHits*100 > 60) {
         SFX["gameover-pass"].play();
     } else {
         SFX["gameover-fail"].play();
@@ -272,8 +282,8 @@ function onWin() {
             difficulty: difficulty,
             score: score,
             hits: hits,
-            maxScore: maxScore,
-            accuracy: hits/maxScore*100,
+            maxScore: maxHits,
+            accuracy: hits/maxHits*100,
             rank: rank
         });
 
@@ -358,7 +368,6 @@ function animateChangePage(event, url) {
 function animateReceivePage(element) {
     if (getGetParam("animate")) {
         const background = document.querySelector("html").style.background;
-        console.log(background);
 
         document.querySelector("html").style.transition = "none";
         document.querySelector("html").style.background = "black";
@@ -429,7 +438,7 @@ function restartGame() {
     lost = false;
     clearInterval(lostAnimationInterval);
     lostAnimationInterval = null;
-    maxScore = 0
+    maxHits = 0
     health = maxHealth;
 
     SFX.restart.play();
@@ -459,6 +468,8 @@ function restartGame() {
     hits = 0;
     paused = false;
 
+    document.getElementById("score-display-text").innerText = "000,000";
+
     main()
 }
 
@@ -477,7 +488,7 @@ function deleteBall(ball) {
 function clearBall(ball) {
     // Animate the dissapearance of the ball.
     ball.dissapearanceAnimationProgress = 0;
-    score += 1000;
+    updateScore(1000)
 
     // Play the sound effect.
     SFX["hit-break"].cloneNode().play();
@@ -496,6 +507,22 @@ function spawnRandomTriangle(element) {
     newTriangle.style.display = "absolute";
 
     element.appendChild(newTriangle)
+}
+
+/**
+ * Update the score and make it glow.
+ * @param {number} increase - The increase in score.
+ */
+function updateScore(increase) {
+    score += increase;
+
+    document.getElementById("score-display-text").classList.remove("glow-score");
+    document.getElementById("score-display-text").innerText = String(score.toFixed(0)).padStart(6, "0").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    document.getElementById("score-display-text").classList.add("glow-score");
+
+    document.getElementById("score-display-text").addEventListener("animationend", function() {
+        document.getElementById("score-display-text").classList.remove("glow-score");
+    });
 }
 
 CanvasRenderingContext2D.prototype.roundedRectangle = function(x, y, width, height, rounded) {

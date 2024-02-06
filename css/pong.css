@@ -58,6 +58,34 @@
     transition: 0.1s linear;
 }
 
+.score-display {
+    position: fixed;
+    top: 0;
+    right: 0;
+    color: white;
+    font-family: 'San Francisco', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 3px;
+    margin-top: 20px;
+    margin-right: 20px;
+    border-radius: 5px;
+    border: 2px solid #ffffff00;
+    transition: 0.1s ease-in-out;
+    text-align: right;
+}
+
+.glow-score {
+    animation: glow-text 1s ease-in-out;
+}
+
+.score-display-subtext {
+    /* Woah, I don't know why but this solves mysterious spacing. */
+    float: right;
+    color: white;
+    font-family: 'San Francisco', sans-serif;
+    font-size: 1.5rem;
+}
+
 .loading {
     position: fixed;
     visibility: visible;
@@ -479,5 +507,17 @@
     100% {
         scale: 1;
         opacity: 1;
+    }
+}
+
+@keyframes glow-text {
+    0% {
+        text-shadow: none;
+    }
+    50% {
+        text-shadow: 2px 2px 20px #dcf6ff;
+    }
+    100% {
+        text-shadow: none;
     }
 }
