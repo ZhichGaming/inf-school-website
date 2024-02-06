@@ -111,7 +111,7 @@ function onLoad() {
                             <p class="history-item-date">${fuzzy}</p>
                         </div>
                     </div>
-                    <p class="history-item-score">${score.score}</p>
+                    <p class="history-item-score">${score.score.toFixed(0)}</p>
                 </div>
                 <hr class="history-item-separator">`
 

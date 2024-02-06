@@ -8,6 +8,7 @@ let balls = [];
 let paddlePosition = screen.width / 2 * RESOLUTION_RATIO;
 let startTime = Date.now();
 let score = 0;
+let hits = 0;
 let maxScore = 0;
 let maxHealth = MAX_HEALTH;
 let health = maxHealth;

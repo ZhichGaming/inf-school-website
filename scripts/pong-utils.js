@@ -140,7 +140,8 @@ function checkPaddleCollision(ball) {
 
             ball.velocity[1] = -ball.velocity[1];
             SFX["hit"].cloneNode().play();
-            score += 1;
+            hits++;
+            score += ball.health * Math.sqrt(ball.velocity[0]**2 + ball.velocity[1]**2);
 
             if (ball.health > 1) {
                 ball.health -= 1;
@@ -234,7 +235,7 @@ function applyGravity(ball) {
  * On win of the game.
  */
 function onWin() {
-    const min = Math.max(...Object.keys(RANK_REQUIREMENTS).filter( num => num <= score/maxScore ));
+    const min = Math.max(...Object.keys(RANK_REQUIREMENTS).filter( num => num <= hits/maxScore ));
     const rank = RANK_REQUIREMENTS[min];
     const map = pongMaps.find( map => map.id == selectedMap);
 
@@ -243,8 +244,8 @@ function onWin() {
     document.getElementById("win-menu-title").innerText = map.name ?? "Unknown";
     document.getElementById("win-menu-artist").innerText = map.artist ?? "Unknown";
     document.getElementById("win-menu-difficulty").innerText = difficulty ?? "Unknown";
-    document.getElementById("score").innerText = String(score).padStart(6, "0").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    document.getElementById("accuracy").innerText = (score/maxScore*100).toFixed(1) + "%";
+    document.getElementById("score").innerText = String(score.toFixed(0)).padStart(6, "0").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    document.getElementById("accuracy").innerText = (hits/maxScore*100).toFixed(1) + "%";
     document.getElementById("time").innerText = `${Math.floor((Date.now() - startTime)/1000)}s`;
 
     document.getElementById("win-menu").classList.remove("hidden");
@@ -254,7 +255,7 @@ function onWin() {
         document.getElementById("win-menu").classList.remove("show-win-menu");
     });
 
-    if (score/maxScore*100 > 60) {
+    if (hits/maxScore*100 > 60) {
         SFX["gameover-pass"].play();
     } else {
         SFX["gameover-fail"].play();
@@ -267,12 +268,12 @@ function onWin() {
 
         scores.push({ 
             date: new Date().toISOString(), 
-            score: score/maxScore*100,
             time: Math.floor((Date.now() - startTime)/1000),
             difficulty: difficulty,
             score: score,
+            hits: hits,
             maxScore: maxScore,
-            accuracy: score/maxScore*100,
+            accuracy: hits/maxScore*100,
             rank: rank
         });
 
@@ -455,6 +456,7 @@ function restartGame() {
 
     startTime = Date.now();
     score = 0;
+    hits = 0;
     paused = false;
 
     main()
@@ -475,6 +477,7 @@ function deleteBall(ball) {
 function clearBall(ball) {
     // Animate the dissapearance of the ball.
     ball.dissapearanceAnimationProgress = 0;
+    score += 1000;
 
     // Play the sound effect.
     SFX["hit-break"].cloneNode().play();
