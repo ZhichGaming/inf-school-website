@@ -47,6 +47,12 @@ function start() {
         setTimeout(() => {
             document.getElementById("main").classList.remove("blurred");
             document.getElementById("loading").classList.add("fade-out");
+
+            document.getElementById("loading").addEventListener("transitionend", () => {
+                main();
+                main();
+                main();
+            }, { once: true });
         }, 3000);
 
         setTimeout(() => {
