@@ -2,6 +2,8 @@ let selectedMap = null;
 let currentBGM = null;
 
 function onLoad() {
+    animateReceivePage(document.getElementById("main"));
+
     for (let pongMap of pongMaps) {
         const mapElement = 
         `<div id="${pongMap.id}" class="select-item" style="background-image: linear-gradient(to bottom, rgba(8, 8, 8, 0.586), rgba(242, 234, 240, 0)), url('./assets/maps/${pongMap.id}/background.png'); background-size: cover; background-position: center;">
@@ -57,13 +59,11 @@ function onLoad() {
                     SFX.hover.cloneNode().play()
                 }
 
-                tableChild.onclick = () => {
+                tableChild.addEventListener("click", (event) => {
                     SFX["select-difficulty"].cloneNode().play();
-
-                    setTimeout(() => {
-                        window.location.href = `./pong.html?map=${pongMap.id}&difficulty=${tableChild.id}`;
-                    }, 1000);
-                }
+                    
+                    animateChangePage(event, `./pong.html?map=${pongMap.id}&difficulty=${tableChild.id}`)
+                });
             }
 
             const history = document.getElementById('history');

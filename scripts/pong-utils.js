@@ -319,6 +319,73 @@ function onLose() {
 }
 
 /**
+ * Animate the change of page with a dark overlay.
+ * @param {MouseEvent} event - The mouse event.
+ * @param {string} url - The URL to change to.
+ */
+function animateChangePage(event, url) {
+    var x = event.pageX;
+    var y = event.pageY;
+
+    var darkOverlay = document.getElementById('dark-overlay');
+    darkOverlay.style.opacity = '1'; // Adjust the opacity as needed
+    darkOverlay.style.clipPath = 'circle(0% at ' + x + 'px ' + y + 'px)';
+    
+    var startTime;
+
+    function animate(time) {
+        if (!startTime) startTime = time;
+        var progress = (time - startTime) / 500; // 500 milliseconds animation duration
+        darkOverlay.style.clipPath = 'circle(' + (progress * 100) + '% at ' + x + 'px ' + y + 'px)';
+
+        if (progress < 1) {
+            requestAnimationFrame(animate);
+        } else {
+            // I could probably use a URL object here but I'm too lazy to.
+            const resultURL = url + (url.includes("?") ? "&" : "?") + "animate=true";
+            window.location.href = resultURL;
+        }
+    }
+
+    requestAnimationFrame(animate);
+}
+
+/**
+ * Animate the received page with an opacity transition.
+ * If the animate get parameter is not present, the transition is removed.
+ */
+function animateReceivePage(element) {
+    if (getGetParam("animate")) {
+        const background = document.querySelector("html").style.background;
+        console.log(background);
+
+        document.querySelector("html").style.transition = "none";
+        document.querySelector("html").style.background = "black";
+
+        // By reading the offsetHeight property, we are forcing
+        // the browser to flush the pending CSS changes (which it
+        // does to ensure the value obtained is accurate).
+        document.querySelector("html").offsetHeight;
+
+        document.querySelector("html").style.transition = "background 1s ease-out";
+
+        document.querySelector("html").offsetHeight;
+        document.querySelector("html").style.background = background;
+        
+        element.style.opacity = 1;
+
+        const url = new URL(window.location.href);
+        url.searchParams.delete("animate");
+        window.history.pushState({}, "", url);
+    } else {
+        // const transition = document.getElementById("body").style.transition;
+        element.style.transition = "none";
+        element.style.opacity = 1;
+        // document.getElementById("body").style.transition = transition;
+    }
+}
+
+/**
  * Get the information of the paddle.
  * @returns Object with x, y, width and height.
  */

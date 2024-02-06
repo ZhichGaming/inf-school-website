@@ -13,6 +13,8 @@ function start() {
     selectedMap = getGetParam("map");
     difficulty = getGetParam("difficulty");
 
+    animateReceivePage(document.getElementById("body"));
+
     if (selectedMap != null && difficulty != null) {
         const map = pongMaps.find(map => map.id == selectedMap);
         const diff = map.difficulties.find(diff => diff.name.toLowerCase() == difficulty.toLowerCase());
@@ -99,16 +101,23 @@ function start() {
         SFX.hover.cloneNode().play();
     });
 
-    document.getElementById("win-menu-retry").onclick = () => {
+    document.getElementById("restart").addEventListener("click", () => {
         onclickRestartButton();
-    }
-    document.getElementById("win-menu-menu").onclick = () => {
+    });
+    document.getElementById("quit").addEventListener("click", (event) => {
         SFX["select-expand"].cloneNode().play();
 
-        setTimeout(() => {
-            window.location.href = "./pong-menu.html";
-        }, 1000);
-    }
+        animateChangePage(event, './pong-menu.html')
+    });
+
+    document.getElementById("win-menu-retry").addEventListener("click", () => {
+        onclickRestartButton();
+    });
+    document.getElementById("win-menu-menu").addEventListener("click", (event) => {
+        SFX["select-expand"].cloneNode().play();
+
+        animateChangePage(event, './pong-menu.html')
+    });
 
     main()
 }

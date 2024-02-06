@@ -8,12 +8,8 @@
         <script src="./scripts/pong-maps.js"></script>
         <title>Pong</title>
     </head>
-    <body id="body">
-        <!-- <header>
-            <div class="head">
-                <h1>Pong</h1>
-            </div>
-        </header> -->
+    <body id="body" style="opacity: 0; transition: opacity 1s ease-out;">
+        <div id="dark-overlay"></div>
         <div id="loading" class="loading">
             <div class="loading-options">
                 <div class="loading-option checkbox-wrapper-2">
@@ -64,8 +60,8 @@
                 <div class="loss-menu-content">
                     <span>failed</span>
                     <div class="loss-menu-buttons">
-                        <button id="restart" class="loss-menu-button" onclick="onclickRestartButton()" role="button"><span>Retry</span></button>
-                        <button id="quit" class="loss-menu-button" role="button" onclick="window.location.href='./pong-menu.html'"><span>Quit</span></button>
+                        <button id="restart" class="loss-menu-button" role="button"><span>Retry</span></button>
+                        <button id="quit" class="loss-menu-button" role="button"><span>Quit</span></button>
                     </div>
                 </div>
             </div>
