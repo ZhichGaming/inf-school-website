@@ -44,6 +44,18 @@ function onKeyup(event) {
 
 // Move the paddle using cursor.
 document.addEventListener("mousemove", function(event) {
-    if (controlWithMouse)
+    if (controlWithMouse) {
+        if (event.clientX*2 > canvas.width - PADDLE_WIDTH/2) {
+            paddlePosition = canvas.width - PADDLE_WIDTH/2;
+            return;
+        }
+
+        else if (event.clientX < PADDLE_WIDTH/2) {
+            paddlePosition = PADDLE_WIDTH/2;
+            return;
+        }
+
         paddlePosition = event.clientX*2;
+
+    }
 });
